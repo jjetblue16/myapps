@@ -5,12 +5,36 @@
         <script type="text/javascript" src="calculator.js"></script>
     </head>
     <body>
-        <table>
+        <table style="padding: 10px;">
             <tr>
-                <td><button class="topRow">AC</button></td>
-                <td><button class="topRow">+/-</button></td>
-                <td><button class="topRow">%</button></td>
-                <td><button class="rightColumn">÷</button></td>
+                <td colspan="4">
+                    <p style="font-size: 200%; color: white" align="right"><span id=calNumber>0</span></p>
+                </td>
+            </tr>
+            <tr align="right">
+                <td><button class="topRow" onclick="clearButton()">AC</button></td>
+                <td><button class="topRow" onclick="negate()">+/-</button></td>
+                <td><button class="topRow" onclick="percent()">%</button></td>
+                <td><button class="rightColumn" onclick="divide()">÷</button></td>
+            </tr><tr align="right">
+                <td><button class="middle" onclick="numberButton(7)">7</button></td>
+                <td><button class="middle" onclick="numberButton(8)">8</button></td>
+                <td><button class="middle" onclick="numberButton(9)">9</button></td>
+                <td><button class="rightColumn" onclick="multi()">X</button></td>
+            </tr><tr align="right">
+                <td><button class="middle" onclick="numberButton(4)">4</button></td>
+                <td><button class="middle" onclick="numberButton(5)">5</button></td>
+                <td><button class="middle" onclick="numberButton(6)">6</button></td>
+                <td><button class="rightColumn" onclick="minus()">-</button></td>
+            </tr><tr align="right">
+                <td><button class="middle" onclick="numberButton(1)">1</button></td>
+                <td><button class="middle" onclick="numberButton(2)">2</button></td>
+                <td><button class="middle" onclick="numberButton(3)">3</button></td>
+                <td><button class="rightColumn" onclick="plus()">+</button></td>
+            </tr><tr align="right">
+                <td colspan="2"><button id="bigButton" onclick="numberButton(0)">0</button></td>
+                <td><button class="middle" onclick="decimal()">.</button></td>
+                <td><button class="rightColumn" onclick="equal()">=</button></td>
             </tr>
         </table>
     </body>

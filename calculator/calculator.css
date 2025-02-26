@@ -1,0 +1,36 @@
+.topRow {
+    color: black;
+}
+
+.middle {
+    color: white;
+    background-color: gray;
+}
+
+.rightColumn    {
+    color: white;
+    background-color: orange;
+}
+
+table   {
+    width: 3.7in;
+    height: 100%;
+    background-color: black;
+}
+
+#bigButton    {
+    color: white;
+    background-color: gray;
+    width: 100%;
+}
+
+button  {
+    border-radius: 50%;
+    width: 75px;
+    height: 100%;
+    border: none;
+}
+
+td  {
+    font-size: 100%;
+}
