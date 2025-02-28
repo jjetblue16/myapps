@@ -35,7 +35,7 @@ function operatorClicked(operator)  {
     else    {
         numberStorage=equal();
     }
-    whatOperatorClicked=operator
+    whatOperatorClicked=operator;
 }
 
 function divide()   {
@@ -57,23 +57,23 @@ function minus()   {
 function equal()    {
     decimalClick=false;
     divideForDecimal;
-    if(!operatorClicked==undefined) {
-        if(whatOperatorClicked=="plus") {
-            currentNumber=numberStorage+currentNumber;
-        }
-        else if(whatOperatorClicked=="minus")   {
-            currentNumber=numberStorage-currentNumber;
-        }
-        else if(whatOperatorClicked=="multi")   {
-            currentNumber=numberStorage*currentNumber;
-        }
-        else if(whatOperatorClicked=="divide")  {
-            currentNumber=numberStorage/currentNumber;
-        }
+    if(whatOperatorClicked==undefined) {
+    }
+    else if(whatOperatorClicked=="plus") {
+        currentNumber=numberStorage+currentNumber;
+    }
+    else if(whatOperatorClicked=="minus")   {
+        currentNumber=numberStorage-currentNumber;
+    }
+    else if(whatOperatorClicked=="multi")   {
+        currentNumber=numberStorage*currentNumber;
+    }
+    else if(whatOperatorClicked=="divide")  {
+        currentNumber=numberStorage/currentNumber;
     }
     let result=currentNumber
     result=result.toPrecision(10)*1;
-    document.getElementById("calNumber").textContent=currentNumber;
+    document.getElementById("calNumber").textContent=result;
     currentNumber=0;
     return result;
 }
