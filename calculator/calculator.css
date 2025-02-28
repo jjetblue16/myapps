@@ -16,21 +16,24 @@ table   {
     width: 3.7in;
     height: 100%;
     background-color: black;
-}
-
-#bigButton    {
-    color: white;
-    background-color: gray;
-    width: 100%;
+    border-radius: 3%;
 }
 
 button  {
-    border-radius: 50%;
-    width: 75px;
+    border-radius: 9%;
+    width: 100%;
     height: 100%;
+    touch-action: manipulation;
     border: none;
 }
 
 td  {
     font-size: 100%;
+    width: 25%;
+    padding: 1%;
+}
+
+#text   {
+    font-size: 200%;
+    color: white;
 }
