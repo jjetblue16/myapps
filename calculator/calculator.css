@@ -23,12 +23,11 @@ button  {
     border-radius: 9%;
     width: 100%;
     height: 100%;
-    touch-action: manipulation;
     border: none;
+    font-size: 130%;
 }
 
 td  {
-    font-size: 100%;
     width: 25%;
     padding: 1%;
 }
@@ -36,4 +35,8 @@ td  {
 #text   {
     font-size: 200%;
     color: white;
+}
+
+body    {
+    touch-action: manipulation;
 }
