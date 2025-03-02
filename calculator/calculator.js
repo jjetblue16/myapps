@@ -8,6 +8,8 @@ let decimalClick=false;
 
 let divideForDecimal=10;
 
+let lastNumber;
+
 function decimal()  {
     if(decimalClick==false) {
         document.getElementById("calNumber").textContent=currentNumber+".";
@@ -55,24 +57,30 @@ function minus()   {
 }
 
 function equal()    {
+    let result;
     decimalClick=false;
-    divideForDecimal;
+    divideForDecimal=10;
+    if(lastNumber!=undefined) {
+        currentNumber=lastNumber;
+        lastNumber=undefined;
+    }
     if(whatOperatorClicked==undefined) {
     }
     else if(whatOperatorClicked=="plus") {
-        currentNumber=numberStorage+currentNumber;
+        result=numberStorage+currentNumber;
     }
     else if(whatOperatorClicked=="minus")   {
-        currentNumber=numberStorage-currentNumber;
+        result=numberStorage-currentNumber;
     }
     else if(whatOperatorClicked=="multi")   {
-        currentNumber=numberStorage*currentNumber;
+        result=numberStorage*currentNumber;
     }
     else if(whatOperatorClicked=="divide")  {
-        currentNumber=numberStorage/currentNumber;
+        result=numberStorage/currentNumber;
     }
-    let result=currentNumber
     result=result.toPrecision(10)*1;
+    numberStorage=result;
+    lastNumber=currentNumber;
     document.getElementById("calNumber").textContent=result;
     currentNumber=0;
     return result;
