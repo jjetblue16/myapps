@@ -23,7 +23,7 @@ function percent()  {
 }
 
 function negate()   {
-    currentNumber=currentNumber*-1
+    currentNumber=currentNumber*-1;
     document.getElementById("calNumber").textContent=currentNumber;
 }
 
