@@ -93,7 +93,7 @@ function numberButton(number)   {
         currentNumber=currentNumber.toPrecision(10)*1;
     }
     else    {
-        if(currentNumber>=0)    {
+        if(currentNumber>0 || currentNumber==0)    {
             currentNumber=currentNumber*10+number;
         }
         else    {
