@@ -11,7 +11,7 @@ let divideForDecimal=10;
 let lastNumber;
 
 function decimal()  {
-    if(document.getElementById("calNumber").textContent.length<8)    {
+    if(document.getElementById("calNumber").textContent.length<11)    {
         if(decimalClick==false) {
             document.getElementById("calNumber").textContent=currentNumber+".";
         }
@@ -89,7 +89,7 @@ function equal()    {
 }
 
 function numberButton(number)   {
-    if(document.getElementById("calNumber").textContent.length<8)    {
+    if(document.getElementById("calNumber").textContent.length<11)    {
         if(decimalClick)    {
             currentNumber=currentNumber+number/divideForDecimal;
             divideForDecimal=divideForDecimal*10;
