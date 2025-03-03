@@ -17,6 +17,13 @@ table   {
     height: 100%;
     background-color: black;
     border-radius: 3%;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    
 }
 
 button  {
