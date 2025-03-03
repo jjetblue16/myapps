@@ -57,48 +57,43 @@ function minus()   {
 }
 
 function equal()    {
-    if(document.getElementById("calNumber").textContent.length<11)    {
-        let result;
-        decimalClick=false;
-        divideForDecimal=10;
-        if(lastNumber!=undefined) {
-            currentNumber=lastNumber;
-            lastNumber=undefined;
-        }
-        if(whatOperatorClicked==undefined) {
-        }
-        else if(whatOperatorClicked=="plus") {
-            result=numberStorage+currentNumber;
-        }
-        else if(whatOperatorClicked=="minus")   {
-            result=numberStorage-currentNumber;
-        }
-        else if(whatOperatorClicked=="multi")   {
-            result=numberStorage*currentNumber;
-        }
-        else if(whatOperatorClicked=="divide")  {
-            result=numberStorage/currentNumber;
-        }
-        result=result.toPrecision(10)*1;
-        numberStorage=result;
-        lastNumber=currentNumber;
-        document.getElementById("calNumber").textContent=result;
-        currentNumber=0;
-        return result;
+    let result;
+    decimalClick=false;
+    divideForDecimal=10;
+    if(lastNumber!=undefined) {
+        currentNumber=lastNumber;
+        lastNumber=undefined;
     }
+    if(whatOperatorClicked==undefined) {
+    }
+    else if(whatOperatorClicked=="plus") {
+        result=numberStorage+currentNumber;
+    }
+    else if(whatOperatorClicked=="minus")   {
+        result=numberStorage-currentNumber;
+    }
+    else if(whatOperatorClicked=="multi")   {
+        result=numberStorage*currentNumber;
+    }
+    else if(whatOperatorClicked=="divide")  {
+        result=numberStorage/currentNumber;
+    }
+    result=result.toPrecision(10)*1;
+    numberStorage=result;
+    lastNumber=currentNumber;
+    document.getElementById("calNumber").textContent=result;
+    currentNumber=0;
+    return result;
 }
 
 function numberButton(number)   {
-    if(document.getElementById("calNumber").textContent.length<11)    {
-        if(decimalClick)    {
-            currentNumber=currentNumber+number/divideForDecimal;
-            divideForDecimal=divideForDecimal*10;
-            currentNumber=currentNumber.toPrecision(10)*1;
-        }
-        else    {
-            currentNumber=currentNumber*10+number
-        }
+    if(decimalClick)    {
+        currentNumber=currentNumber+number/divideForDecimal;
+        divideForDecimal=divideForDecimal*10;
+        currentNumber=currentNumber.toPrecision(10)*1;
     }
+    else    {
+        currentNumber=currentNumber*10+number
     document.getElementById("calNumber").textContent=currentNumber;
 }
 
