@@ -94,6 +94,7 @@ function numberButton(number)   {
     }
     else    {
         currentNumber=currentNumber*10+number
+    }
     document.getElementById("calNumber").textContent=currentNumber;
 }
 
