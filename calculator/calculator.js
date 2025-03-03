@@ -11,10 +11,12 @@ let divideForDecimal=10;
 let lastNumber;
 
 function decimal()  {
-    if(decimalClick==false) {
-        document.getElementById("calNumber").textContent=currentNumber+".";
+    if(document.getElementById("calNumber").textContent.length<11)    {
+        if(decimalClick==false) {
+            document.getElementById("calNumber").textContent=currentNumber+".";
+        }
+        decimalClick=true;
     }
-    decimalClick=true;
 }
 
 function percent()  {
@@ -87,17 +89,19 @@ function equal()    {
 }
 
 function numberButton(number)   {
-    if(decimalClick)    {
-        currentNumber=currentNumber+number/divideForDecimal;
-        divideForDecimal=divideForDecimal*10;
-        currentNumber=currentNumber.toPrecision(10)*1;
-    }
-    else    {
-        if(currentNumber<0)    {
-            currentNumber=currentNumber*10-number;
+    if(document.getElementById("calNumber").textContent.length<11)    {
+        if(decimalClick)    {
+            currentNumber=currentNumber+number/divideForDecimal;
+            divideForDecimal=divideForDecimal*10;
+            currentNumber=currentNumber.toPrecision(10)*1;
         }
         else    {
-        currentNumber=currentNumber*10+number;
+            if(currentNumber<0)    {
+                currentNumber=currentNumber*10-number;
+            }
+            else    {
+            currentNumber=currentNumber*10+number;
+            }
         }
     }
     document.getElementById("calNumber").textContent=currentNumber;
