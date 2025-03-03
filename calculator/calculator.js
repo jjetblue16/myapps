@@ -57,7 +57,7 @@ function minus()   {
 }
 
 function equal()    {
-    if(document.getElementById("calNumber").length<11)    {
+    if(document.getElementById("calNumber").textContent.length<11)    {
         let result;
         decimalClick=false;
         divideForDecimal=10;
@@ -89,7 +89,7 @@ function equal()    {
 }
 
 function numberButton(number)   {
-    if(document.getElementById("calNumber").length<11)    {
+    if(document.getElementById("calNumber").textContent.length<11)    {
         if(decimalClick)    {
             currentNumber=currentNumber+number/divideForDecimal;
             divideForDecimal=divideForDecimal*10;
