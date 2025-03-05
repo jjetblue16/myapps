@@ -34,10 +34,6 @@ function negate()   {
 }
 
 function operatorClicked(operator)  {
-    let resultString = document.getElementById("calNumber").textContent;
-    if (resultString.length >= maxDigits) {
-        return;
-    }
     if(numberStorage==undefined)    {
         numberStorage=currentNumber;
         currentNumber=0;
@@ -114,7 +110,25 @@ function equal() {
     document.getElementById("calNumber").textContent = result;
 
     currentNumber = 0;
+    disableOperatorsIfExceedsLimit(result);
     return result;
+}
+
+function disableOperatorsIfExceedsLimit(result) {
+    let resultString = result.toString();
+    if (resultString.length >= maxDigits) {
+        document.getElementById("plusButton").disabled = true;
+        document.getElementById("minusButton").disabled = true;
+        document.getElementById("multiButton").disabled = true;
+        document.getElementById("divideButton").disabled = true;
+    }
+}
+
+function enableOperators() {
+    document.getElementById("plusButton").disabled = false;
+    document.getElementById("minusButton").disabled = false;
+    document.getElementById("multiButton").disabled = false;
+    document.getElementById("divideButton").disabled = false;
 }
 
 function numberButton(number)   {
@@ -137,8 +151,16 @@ function numberButton(number)   {
             currentNumber=currentNumber*10+number;
         }
     }
-    currentNumber = Math.round(currentNumber * 10000000000) / 10000000000;
+    currentNumber = clipToMaxDigits(currentNumber);
     document.getElementById("calNumber").textContent=currentNumber;
+}
+
+function clipToMaxDigits(num) {
+    let numStr = num.toString();
+    if (numStr.length > maxDigits) {
+        num = parseFloat(numStr.slice(0, maxDigits));
+    }
+    return num;
 }
 
 function clearButton()  {
@@ -148,6 +170,7 @@ function clearButton()  {
     document.getElementById("calNumber").textContent=0;
     divideForDecimal=10;
     lastNumber=undefined;
+    enableOperators();
 }
 
 function getDecimalPlaces(num) {
