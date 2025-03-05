@@ -87,13 +87,14 @@ function equal()    {
 }
 
 function numberButton(number)   {
+    lastNumber=undefined;
     if(decimalClick)    {
         currentNumber=currentNumber+number/divideForDecimal;
         divideForDecimal=divideForDecimal*10;
         currentNumber=currentNumber.toPrecision(10)*1;
     }
     else    {
-        if(currentNumber<0)    {
+        if(currentNumber<0) {
             currentNumber=currentNumber*10-number;
         }
         else    {
@@ -109,4 +110,5 @@ function clearButton()  {
     numberStorage=undefined;
     document.getElementById("calNumber").textContent=0;
     divideForDecimal=10;
+    lastNumber=undefined;
 }
