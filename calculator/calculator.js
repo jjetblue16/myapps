@@ -78,7 +78,8 @@ function equal()    {
     else if(whatOperatorClicked=="divide")  {
         result=numberStorage/currentNumber;
     }
-    result=result.toPrecision(10)*1;
+    let decimals = getDecimalPlaces(result);
+    result = result.toFixed(decimals);
     numberStorage=result;
     lastNumber=currentNumber;
     document.getElementById("calNumber").textContent=result;
@@ -91,7 +92,6 @@ function numberButton(number)   {
     if(decimalClick)    {
         currentNumber=currentNumber+number/divideForDecimal;
         divideForDecimal=divideForDecimal*10;
-        currentNumber=currentNumber.toPrecision(10)*1;
     }
     else    {
         if(currentNumber<0) {
@@ -111,4 +111,12 @@ function clearButton()  {
     document.getElementById("calNumber").textContent=0;
     divideForDecimal=10;
     lastNumber=undefined;
+}
+
+function getDecimalPlaces(num) {
+    let numStr = num.toString();
+    if (numStr.includes('.')) {
+        return numStr.split('.')[1].length;
+    }
+    return 0;
 }
