@@ -10,7 +10,13 @@ let divideForDecimal=10;
 
 let lastNumber;
 
+let maxDigits=11;
+
 function decimal()  {
+    let currentString = currentNumber.toString();
+    if (currentString.length >= maxDigits) {
+        return;
+    }
     if(decimalClick==false) {
         document.getElementById("calNumber").textContent=currentNumber+".";
     }
@@ -28,6 +34,10 @@ function negate()   {
 }
 
 function operatorClicked(operator)  {
+    let resultString = document.getElementById("calNumber").textContent;
+    if (resultString.length >= maxDigits) {
+        return;
+    }
     if(numberStorage==undefined)    {
         numberStorage=currentNumber;
         currentNumber=0;
@@ -91,11 +101,13 @@ function equal() {
         result = storedInt / currentInt;
     }
 
-    console.log("Result before scaling:", result);
-
     result = result / factor;
+    result = Math.round(result * 100000000000) / 100000000000;
 
-    console.log("Final Result:", result);
+      let resultString = result.toString();
+    if (resultString.length >= maxDigits) {
+        return;
+    }
 
     numberStorage = result;
     lastNumber = currentNumber;
@@ -107,10 +119,15 @@ function equal() {
 
 function numberButton(number)   {
     lastNumber=undefined;
+    
+    let currentString = currentNumber.toString();
+    if (currentString.length >= maxDigits) {
+        return;
+    }
+
     if(decimalClick)    {
         currentNumber=currentNumber+number/divideForDecimal;
         divideForDecimal=divideForDecimal*10;
-        currentNumber = Math.round(currentNumber * 10000000000) / 10000000000;
     }
     else    {
         if(currentNumber<0) {
@@ -120,6 +137,7 @@ function numberButton(number)   {
             currentNumber=currentNumber*10+number;
         }
     }
+    currentNumber = Math.round(currentNumber * 10000000000) / 10000000000;
     document.getElementById("calNumber").textContent=currentNumber;
 }
 
