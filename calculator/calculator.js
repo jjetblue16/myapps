@@ -56,36 +56,40 @@ function minus()   {
     operatorClicked("minus");
 }
 
-function equal()    {
+function equal() {
     let result;
-    decimalClick=false;
-    divideForDecimal=10;
-    if(lastNumber!=undefined) {
-        currentNumber=lastNumber;
-        lastNumber=undefined;
+    decimalClick = false;
+    divideForDecimal = 10;
+
+    if (lastNumber != undefined) {
+        currentNumber = lastNumber;
+        lastNumber = undefined;
     }
-    if(whatOperatorClicked==undefined) {
+
+    let decimalsCurrent = getDecimalPlaces(currentNumber);
+    let decimalsStored = getDecimalPlaces(numberStorage);
+
+    let factor = Math.pow(10, Math.max(decimalsCurrent, decimalsStored));
+    let currentInt = currentNumber * factor;
+    let storedInt = numberStorage * factor;
+
+    if (whatOperatorClicked == "plus") {
+        result = storedInt + currentInt;
+    } else if (whatOperatorClicked == "minus") {
+        result = storedInt - currentInt;
+    } else if (whatOperatorClicked == "multi") {
+        result = storedInt * currentInt;
+    } else if (whatOperatorClicked == "divide") {
+        result = storedInt / currentInt;
     }
-    else if(whatOperatorClicked=="plus") {
-        result=numberStorage+currentNumber;
-    }
-    else if(whatOperatorClicked=="minus")   {
-        result=numberStorage-currentNumber;
-    }
-    else if(whatOperatorClicked=="multi")   {
-        result=numberStorage*currentNumber;
-    }
-    else if(whatOperatorClicked=="divide")  {
-        result=numberStorage/currentNumber;
-    }
-    let decimals = getDecimalPlaces(result);
-    result = result.toFixed(decimals);
-    numberStorage=result;
-    lastNumber=currentNumber;
-    document.getElementById("calNumber").textContent=result;
-    currentNumber=0;
+    result = result / factor;
+    numberStorage = result;
+    lastNumber = currentNumber;
+    document.getElementById("calNumber").textContent = result;
+    currentNumber = 0;
     return result;
 }
+
 
 function numberButton(number)   {
     lastNumber=undefined;
