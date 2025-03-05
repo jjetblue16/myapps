@@ -110,6 +110,7 @@ function numberButton(number)   {
     if(decimalClick)    {
         currentNumber=currentNumber+number/divideForDecimal;
         divideForDecimal=divideForDecimal*10;
+        currentNumber = Math.round(currentNumber * 10000000000) / 10000000000;
     }
     else    {
         if(currentNumber<0) {
