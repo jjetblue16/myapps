@@ -70,8 +70,12 @@ function equal() {
     let decimalsStored = getDecimalPlaces(numberStorage);
 
     let factor = Math.pow(10, Math.max(decimalsCurrent, decimalsStored));
+    console.log("Scaling Factor:", factor);
+
     let currentInt = currentNumber * factor;
     let storedInt = numberStorage * factor;
+    console.log("Current as Integer:", currentInt);
+    console.log("Stored as Integer:", storedInt);
 
     if (whatOperatorClicked == "plus") {
         result = storedInt + currentInt;
@@ -80,16 +84,26 @@ function equal() {
     } else if (whatOperatorClicked == "multi") {
         result = storedInt * currentInt;
     } else if (whatOperatorClicked == "divide") {
+        if (currentInt === 0) {
+            console.log("Error: Division by zero");
+            return;
+        }
         result = storedInt / currentInt;
     }
+
+    console.log("Result before scaling:", result);
+
     result = result / factor;
+
+    console.log("Final Result:", result);
+
     numberStorage = result;
     lastNumber = currentNumber;
     document.getElementById("calNumber").textContent = result;
+
     currentNumber = 0;
     return result;
 }
-
 
 function numberButton(number)   {
     lastNumber=undefined;
