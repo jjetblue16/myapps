@@ -100,11 +100,6 @@ function equal() {
     result = result / factor;
     result = Math.round(result * 100000000000) / 100000000000;
 
-      let resultString = result.toString();
-    if (resultString.length >= maxDigits) {
-        return;
-    }
-
     numberStorage = result;
     lastNumber = currentNumber;
     document.getElementById("calNumber").textContent = result;
