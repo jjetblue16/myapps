@@ -10,13 +10,7 @@ let divideForDecimal=10;
 
 let lastNumber;
 
-let maxDigits=11;
-
 function decimal()  {
-    let currentString = currentNumber.toString();
-    if (currentString.length >= maxDigits) {
-        return;
-    }
     if(decimalClick==false) {
         document.getElementById("calNumber").textContent=currentNumber+".";
     }
@@ -64,37 +58,27 @@ function minus()   {
 
 function equal() {
     let result;
-    decimalClick = false;
-    divideForDecimal = 10;
-    if (lastNumber != undefined) {
-        currentNumber = lastNumber;
-        lastNumber = undefined;
+    decimalClick=false;
+    divideForDecimal=10;
+    if (lastNumber!=undefined) {
+        currentNumber=lastNumber;
+        lastNumber=undefined;
     }
-    let decimalsCurrent = getDecimalPlaces(currentNumber);
-    let decimalsStored = getDecimalPlaces(numberStorage);
-    let factor = Math.pow(10, Math.max(decimalsCurrent, decimalsStored));
-    let currentInt = currentNumber * factor;
-    let storedInt = numberStorage * factor;
-    if (whatOperatorClicked == "plus") {
-        result = storedInt + currentInt;
+    if (whatOperatorClicked=="plus") {
+        result=numberStorage+currentNumber;
     }
-    else if (whatOperatorClicked == "minus") {
-        result = storedInt - currentInt;
+    else if (whatOperatorClicked=="minus") {
+        result=numberStorage-currentNumber;
     }
-    else if (whatOperatorClicked == "multi") {
-        result = storedInt * currentInt;
+    else if (whatOperatorClicked=="multi") {
+        result=numberStorage*currentNumber;
     }
-    else if (whatOperatorClicked == "divide") {
-        if (currentInt === 0) {
-            console.log("Error: Division by zero");
-            return;
-        }
-        result = storedInt / currentInt;
+    else if (whatOperatorClicked=="divide") {
+        result=numberStorage/currentNumber;
     }
-    result = result / factor;
-    result = Math.round(result * 100000000000) / 100000000000;
-    numberStorage = result;
-    lastNumber = currentNumber;
+    result=result.toPrecision(10)*1;
+    numberStorage=result;
+    lastNumber=currentNumber;
     document.getElementById("calNumber").textContent = result;
     currentNumber = 0;
     return result;
@@ -102,14 +86,10 @@ function equal() {
 
 function numberButton(number)   {
     lastNumber=undefined;    
-    let currentString = currentNumber.toString();
-    if (currentString.length >= maxDigits) {
-        return;
-    }
-
     if(decimalClick)    {
         currentNumber=currentNumber+number/divideForDecimal;
         divideForDecimal=divideForDecimal*10;
+        currentNumber=currentNumber.toPrecision(10)*1;
     }
     else    {
         if(currentNumber<0) {
@@ -119,16 +99,7 @@ function numberButton(number)   {
             currentNumber=currentNumber*10+number;
         }
     }
-    currentNumber = clipToMaxDigits(currentNumber);
     document.getElementById("calNumber").textContent=currentNumber;
-}
-
-function clipToMaxDigits(num) {
-    let numStr = num.toString();
-    if (numStr.length > maxDigits) {
-        num = parseFloat(numStr.slice(0, maxDigits));
-    }
-    return num;
 }
 
 function clearButton()  {
@@ -138,12 +109,4 @@ function clearButton()  {
     document.getElementById("calNumber").textContent=0;
     divideForDecimal=10;
     lastNumber=undefined;
-}
-
-function getDecimalPlaces(num) {
-    let numStr = num.toString();
-    if (numStr.includes('.')) {
-        return numStr.split('.')[1].length;
-    }
-    return 0;
 }
