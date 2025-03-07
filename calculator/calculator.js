@@ -74,13 +74,7 @@ function equal() {
         result=numberStorage*currentNumber;
     }
     else if (whatOperatorClicked=="divide") {
-        if(!currentNumber==0;)    {
-            result=numberStorage/currentNumber;
-        }
-        else    {
-            document.getElementById("calNumber").textContent="undefined";
-            return;
-        }
+        result=numberStorage/currentNumber;
     }
     result=result.toPrecision(10)*1;
     numberStorage=result;
