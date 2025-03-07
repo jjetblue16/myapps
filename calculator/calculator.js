@@ -74,12 +74,18 @@ function equal() {
         result=numberStorage*currentNumber;
     }
     else if (whatOperatorClicked=="divide") {
-        result=numberStorage/currentNumber;
+        if(!currentNumber=0;)    {
+            result=numberStorage/currentNumber;
+        }
+        else    {
+            document.getElementById("calNumber").textContent="undefined";
+            return;
+        }
     }
     result=result.toPrecision(10)*1;
     numberStorage=result;
     lastNumber=currentNumber;
-    document.getElementById("calNumber").textContent = result;
+    document.getElementById("calNumber").textContent=result;
     currentNumber = 0;
     return result;
 }
