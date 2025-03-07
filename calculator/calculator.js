@@ -74,7 +74,7 @@ function equal() {
         result=numberStorage*currentNumber;
     }
     else if (whatOperatorClicked=="divide") {
-        if(!currentNumber=0;)    {
+        if(!currentNumber==0;)    {
             result=numberStorage/currentNumber;
         }
         else    {
