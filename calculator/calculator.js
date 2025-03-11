@@ -58,14 +58,14 @@ function minus()   {
 
 function equal() {
     let result;
-    let stringNumberStorage=numberStorage.toString();
-    let stringCurrent=currentNumber.toString();
     decimalClick=false;
     divideForDecimal=10;
     if (lastNumber!=undefined) {
         currentNumber=lastNumber;
         lastNumber=undefined;
     }
+    let stringNumberStorage=numberStorage.toString();
+    let stringCurrent=currentNumber.toString();
     if (whatOperatorClicked=="plus") {
         result=bd_add(stringNumberStorage, stringCurrent);
     }
