@@ -78,7 +78,7 @@ function equal() {
     else if (whatOperatorClicked=="divide") {
         result=numberStorage/currentNumber;
     }
-    numberStorage=result;
+    numberStorage=Number(result);
     lastNumber=currentNumber;
     document.getElementById("calNumber").textContent=result;
     currentNumber = 0;
@@ -107,6 +107,8 @@ function clearButton()  {
     currentNumber=0;
     decimalClick=false;
     numberStorage=undefined;
+    stringNumberStorage=undefined;
+    stringCurrent=undefined;
     document.getElementById("calNumber").textContent=0;
     divideForDecimal=10;
     lastNumber=undefined;
