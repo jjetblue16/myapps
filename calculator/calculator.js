@@ -58,6 +58,8 @@ function minus()   {
 
 function equal() {
     let result;
+    let stringNumberStorage=numberStorage.toString();
+    let stringCurrent=currentNumber.toString();
     decimalClick=false;
     divideForDecimal=10;
     if (lastNumber!=undefined) {
@@ -65,7 +67,7 @@ function equal() {
         lastNumber=undefined;
     }
     if (whatOperatorClicked=="plus") {
-        result=numberStorage+currentNumber;
+        result=bd_add(stringNumberStorage, stringCurrent);
     }
     else if (whatOperatorClicked=="minus") {
         result=numberStorage-currentNumber;
@@ -76,7 +78,6 @@ function equal() {
     else if (whatOperatorClicked=="divide") {
         result=numberStorage/currentNumber;
     }
-    result=result.toPrecision(10)*1;
     numberStorage=result;
     lastNumber=currentNumber;
     document.getElementById("calNumber").textContent=result;
@@ -118,10 +119,6 @@ function bd_add(number1, number2) {
     let decimalPointLength2=number2.length;
     let numbersAfterPoint=decimalPointIndex!=-1?decimalPointLength-1-decimalPointIndex:0;
     let numbersAfterPoint2=decimalPointIndex2!=-1?decimalPointLength2-1-decimalPointIndex2:0;
-
-    console.log("numbersAfterPoint=" + numbersAfterPoint);
-    console.log("numbersAfterPoint2=" + numbersAfterPoint2);
-
     number1=number1.replace(".", "");
     number2=number2.replace(".", "");
     let firstNumber=parseInt(number1);
