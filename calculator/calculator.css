@@ -25,6 +25,9 @@ button  {
     height: 100%;
     border: none;
     font-size: 130%;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 td  {
