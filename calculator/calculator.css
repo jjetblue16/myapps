@@ -28,6 +28,7 @@ button  {
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    -moz-user-select: all;
 }
 
 td  {
@@ -39,6 +40,7 @@ td  {
     -webkit-user-select: all;
     -ms-user-select: all;
     user-select: all;
+    -moz-user-select: all;
     font-size: 200%;
     color: white;
 }
