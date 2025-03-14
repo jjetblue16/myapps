@@ -172,7 +172,8 @@ function decimal_multi(number1, number2) {
             stringResult = "0." + "0".repeat(maxFractionalPart-stringResult.length) + stringResult;
         }
         else {
-            stringResult=stringResult.substring(0, stringResult.length-maxFractionalPart)+"."+stringResult.substring(stringResult.length-maxFractionalPart);
+            let allNumbersAfterDecimal=numbersAfterPoint+numbersAfterPoint2;
+            stringResult=stringResult.substring(0, stringResult.length-allNumbersAfterDecimal)+"."+stringResult.substring(stringResult.length-allNumbersAfterDecimal);
         }
         while(stringResult.charAt(stringResult.length-1)=="0")   {
             stringResult=stringResult.substring(0, stringResult.length-1);
