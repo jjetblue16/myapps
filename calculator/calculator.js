@@ -127,7 +127,7 @@ function decimal_add(number1, number2) {
         console.log(secondNumber+"=secondneumrb");
         console.log("result="+stringResult);
         if(stringResult.length<=maxFractionalPart)   {
-            stringResult = "0." + "0".repeat(maxFractionalPart-stringResult.length) + stringResult;
+            stringResult = "0." + "0".repeat(maxFractionalPart-stringResult.length)+stringResult;
         }
         else {
             stringResult=stringResult.substring(0, stringResult.length-maxFractionalPart)+"."+stringResult.substring(stringResult.length-maxFractionalPart);
@@ -168,12 +168,11 @@ function decimal_multi(number1, number2) {
         console.log(firstNumber+"=firstnumber");
         console.log(secondNumber+"=secondneumrb");
         console.log("result="+stringResult);
-        if(stringResult.length<=maxFractionalPart)   {
-            stringResult = "0." + "0".repeat(maxFractionalPart-stringResult.length) + stringResult;
+        if(stringResult.length<maxFractionalPart*2)   {
+            stringResult = "0." + "0".repeat(maxFractionalPart*2-stringResult.length) + stringResult;
         }
         else {
-            let allNumbersAfterDecimal=numbersAfterPoint+numbersAfterPoint2;
-            stringResult=stringResult.substring(0, stringResult.length-allNumbersAfterDecimal)+"."+stringResult.substring(stringResult.length-allNumbersAfterDecimal);
+            stringResult=stringResult.substring(0, stringResult.length-maxFractionalPart*2)+"."+stringResult.substring(stringResult.length-maxFractionalPart*2);
         }
         while(stringResult.charAt(stringResult.length-1)=="0")   {
             stringResult=stringResult.substring(0, stringResult.length-1);
