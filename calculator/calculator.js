@@ -67,7 +67,7 @@ function equal() {
         result=decimal_add(numberStorage, currentNumber);
     }
     else if (whatOperatorClicked=="minus") {
-        result=decimal_minus(numberStorage-currentNumber);
+        result=numberStorage-currentNumber;
     }
     else if (whatOperatorClicked=="multi") {
         result=decimal_multi(numberStorage, currentNumber);
@@ -178,48 +178,6 @@ function decimal_multi(number1, number2) {
     }
     else    {
         result=firstNumber*secondNumber;
-        stringResult=result.toString();
-    }
-    if(stringResult.charAt(stringResult.length-1)==".") {
-        stringResult=stringResult.replace(".", "");
-    }
-    return stringResult;
-}
-
-function decimal_minus(number1, number2) {
-    let decimalPointIndex=number1.indexOf(".");
-    let decimalPointIndex2=number2.indexOf(".");
-    let decimalPointLength=number1.length;
-    let decimalPointLength2=number2.length;
-    let numbersAfterPoint=decimalPointIndex!=-1?decimalPointLength-1-decimalPointIndex:0;
-    let numbersAfterPoint2=decimalPointIndex2!=-1?decimalPointLength2-1-decimalPointIndex2:0;
-    number1=number1.replace(".", "");
-    number2=number2.replace(".", "");
-    let firstNumber=parseInt(number1);
-    let secondNumber=parseInt(number2);
-    let maxFractionalPart=Math.max(numbersAfterPoint, numbersAfterPoint2);
-    let stringResult;
-    let result;
-    if(maxFractionalPart!=0)    {
-        firstNumber=firstNumber*(10**(maxFractionalPart-numbersAfterPoint));
-        secondNumber=secondNumber*(10**(maxFractionalPart-numbersAfterPoint2));
-        result=firstNumber-secondNumber;
-        stringResult=result.toString();
-        console.log(firstNumber+"=firstnumber");
-        console.log(secondNumber+"=secondneumrb");
-        console.log("result="+stringResult);
-        if(stringResult.length<=maxFractionalPart)   {
-            stringResult = "0." + "0".repeat(maxFractionalPart-stringResult.length)+stringResult;
-        }
-        else {
-            stringResult=stringResult.substring(0, stringResult.length-maxFractionalPart)+"."+stringResult.substring(stringResult.length-maxFractionalPart);
-        }
-        while(stringResult.charAt(stringResult.length-1)=="0")   {
-            stringResult=stringResult.substring(0, stringResult.length-1);
-        }
-    }
-    else    {
-        result=firstNumber-secondNumber;
         stringResult=result.toString();
     }
     if(stringResult.charAt(stringResult.length-1)==".") {
