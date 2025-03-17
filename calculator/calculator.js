@@ -23,9 +23,8 @@ function percent()  {
 }
 
 function negate()   {
-    /*currentNumber=currentNumber*-1;
+    currentNumber=bd_multi(currentNumber, "-1");
     document.getElementById("calNumber").textContent=currentNumber;
-    use multiply_bd*/
 }
 
 function operatorClicked(operator)  {
@@ -69,7 +68,7 @@ function equal() {
         result=decimal_add(numberStorage, currentNumber);
     }
     else if (whatOperatorClicked=="minus") {
-        result=numberStorage-currentNumber;
+        result=decimal_minus(numberStorage-currentNumber);
     }
     else if (whatOperatorClicked=="multi") {
         result=decimal_multi(numberStorage, currentNumber);
@@ -188,7 +187,7 @@ function decimal_multi(number1, number2) {
     return stringResult;
 }
 
-function decimal_subtract(number1, number2) {
+function decimal_minus(number1, number2) {
     let decimalPointIndex=number1.indexOf(".");
     let decimalPointIndex2=number2.indexOf(".");
     let decimalPointLength=number1.length;
