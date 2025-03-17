@@ -23,8 +23,7 @@ function percent()  {
 }
 
 function negate()   {
-    currentNumber=bd_multi(currentNumber, "-1");
-    document.getElementById("calNumber").textContent=currentNumber;
+    //document.getElementById("calNumber").textContent=currentNumber;
 }
 
 function operatorClicked(operator)  {
