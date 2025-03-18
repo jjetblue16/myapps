@@ -66,21 +66,21 @@ function equal() {
         lastNumber=undefined;
     }
     if (whatOperatorClicked=="plus") {
-        result=decimal_add(numberStorage, currentNumber);
+        result=decimal_addAndSubtract(numberStorage, currentNumber, "add");
     }
     else if (whatOperatorClicked=="minus") {
-        result=numberStorage-currentNumber;
+        result=decimal_addAndSubtract(numberStorage, currentNumber, "minus");
     }
     else if (whatOperatorClicked=="multi") {
         result=decimal_multi(numberStorage, currentNumber);
     }
     else if (whatOperatorClicked=="divide") {
-        result=numberStorage/currentNumber;
+        result=decimal_divide(numberStorage, currentNumber);
     }
     numberStorage=result;
     lastNumber=currentNumber;
     document.getElementById("calNumber").textContent=result;
-    currentNumber = 0;
+    currentNumber = "0";
     return result;
 }
 
@@ -104,7 +104,7 @@ function clearButton()  {
     lastNumber=undefined;
 }
 
-function decimal_add(number1, number2) {
+function decimal_addAndSubtract(number1, number2, operator) {
     let decimalPointIndex=number1.indexOf(".");
     let decimalPointIndex2=number2.indexOf(".");
     let decimalPointLength=number1.length;
@@ -121,7 +121,12 @@ function decimal_add(number1, number2) {
     if(maxFractionalPart!=0)    {
         firstNumber=firstNumber*(10**(maxFractionalPart-numbersAfterPoint));
         secondNumber=secondNumber*(10**(maxFractionalPart-numbersAfterPoint2));
-        result=firstNumber+secondNumber;
+        if(operator=="add") {
+            result=firstNumber+secondNumber;
+        }
+        else    {
+            result=firstNumber-secondNumber;
+        }
         stringResult=result.toString();
         console.log(firstNumber+"=firstnumber");
         console.log(secondNumber+"=secondneumrb");
@@ -137,7 +142,12 @@ function decimal_add(number1, number2) {
         }
     }
     else    {
-        result=firstNumber+secondNumber;
+        if(operator=="add") {
+            result=firstNumber+secondNumber;
+        }
+        else    {
+            result=firstNumber-secondNumber;
+        }
         stringResult=result.toString();
     }
     if(stringResult.charAt(stringResult.length-1)==".") {
@@ -180,6 +190,42 @@ function decimal_multi(number1, number2) {
     }
     else    {
         result=firstNumber*secondNumber;
+        stringResult=result.toString();
+    }
+    if(stringResult.charAt(stringResult.length-1)==".") {
+        stringResult=stringResult.replace(".", "");
+    }
+    return stringResult;
+}
+
+function decimal_divide(number1, number2) {
+    let decimalPointIndex=number1.indexOf(".");
+    let decimalPointIndex2=number2.indexOf(".");
+    let decimalPointLength=number1.length;
+    let decimalPointLength2=number2.length;
+    let numbersAfterPoint=decimalPointIndex!=-1?decimalPointLength-1-decimalPointIndex:0;
+    let numbersAfterPoint2=decimalPointIndex2!=-1?decimalPointLength2-1-decimalPointIndex2:0;
+    number1=number1.replace(".", "");
+    number2=number2.replace(".", "");
+    let firstNumber=parseInt(number1);
+    let secondNumber=parseInt(number2);
+    let maxFractionalPart=Math.max(numbersAfterPoint, numbersAfterPoint2);
+    let stringResult;
+    let result;
+    if(maxFractionalPart!=0)    {
+        firstNumber=firstNumber*(10**(maxFractionalPart-numbersAfterPoint));
+        secondNumber=secondNumber*(10**(maxFractionalPart-numbersAfterPoint2));
+        result=firstNumber/secondNumber;
+        stringResult=result.toString();
+        console.log(firstNumber+"=firstnumber");
+        console.log(secondNumber+"=secondneumrb");
+        console.log("result="+stringResult);
+        while(stringResult.charAt(stringResult.length-1)=="0")   {
+            stringResult=stringResult.substring(0, stringResult.length-1);
+        }
+    }
+    else    {
+        result=firstNumber/secondNumber;
         stringResult=result.toString();
     }
     if(stringResult.charAt(stringResult.length-1)==".") {
