@@ -23,9 +23,7 @@ function percent()  {
 }
 
 function negate()   {
-    /*currentNumber=currentNumber*-1;
-    document.getElementById("calNumber").textContent=currentNumber;
-    use multiply_bd*/
+    //document.getElementById("calNumber").textContent=currentNumber;
 }
 
 function operatorClicked(operator)  {
