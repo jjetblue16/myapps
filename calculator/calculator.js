@@ -21,12 +21,12 @@ function display(theNumber)  {
 }
 
 function percent()  {
-    currentNumber=decimal_divide(currentNumber, "100");
+    currentNumber=decimalOperation(currentNumber, "100", "divide");
     display(currentNumber);
 }
 
 function negate()   {
-    currentNumber=decimal_multi(currentNumber, "-1");
+    currentNumber=decimalOperation(currentNumber, "-1", "multi");
     display(currentNumber);
 }
 
@@ -70,7 +70,7 @@ function equal() {
 
 function numberButton(number)   {
     lastNumber=undefined;    
-    currentNumber=="0" ? currentNumber=number : currentNumber=currentNumber+number;
+    currentNumber=currentNumber=="0" ? number : currentNumber+number;
     display(currentNumber);
 }
 
