@@ -15,7 +15,6 @@ function decimal()  {
         currentNumber=currentNumber+".";
         display(currentNumber);
     }
-    decimalClick=true;
 }
 
 function display(theNumber)  {
@@ -42,7 +41,6 @@ function operatorClicked(operator)  {
             numberStorage=currentNumber;
         }
         currentNumber="0";
-        decimalClick=false;
     }
     else    {
         numberStorage=equal();
@@ -54,7 +52,6 @@ function operatorClicked(operator)  {
 function equal() {
     if(numberStorage!=undefined && whatOperatorClicked!=undefined && numberButtonClicked==true)    {
         let result;
-        decimalClick=false;
         if (lastNumber!=undefined) {
             currentNumber=lastNumber;
             lastNumber=undefined;
@@ -93,7 +90,6 @@ function clearButton()  {
     numberButtonClicked=false;
     calculationResult=undefined;
     currentNumber="0";
-    decimalClick=false;
     numberStorage=undefined;
     display("0");
     lastNumber=undefined;
