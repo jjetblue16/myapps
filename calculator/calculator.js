@@ -4,16 +4,14 @@ let numberStorage;
 
 let whatOperatorClicked;
 
-let decimalClick=false;
-
 let lastNumber;
 
-let result2;
+let calculationResult;
 
 let numberButtonClicked=false;
 
 function decimal()  {
-    if(decimalClick==false) {
+    if(!currentNumber.includes(".")) {
         currentNumber=currentNumber+".";
         display(currentNumber);
     }
@@ -35,10 +33,10 @@ function negate()   {
 }
 
 function operatorClicked(operator)  {
-    if(numberStorage==undefined || result2!=undefined)    {
-        if(result2!=undefined)  {
-            numberStorage=result2;
-            result2=undefined;
+    if(numberStorage==undefined || calculationResult!=undefined)    {
+        if(calculationResult!=undefined)  {
+            numberStorage=calculationResult;
+            calculationResult=undefined;
         }
         else    {
             numberStorage=currentNumber;
@@ -74,7 +72,7 @@ function equal() {
             result=decimalOperation(numberStorage, currentNumber, "divide");
         }
         numberStorage=result;
-        result2=result;
+        calculationResult=result;
         lastNumber=currentNumber;
         display(result);
         currentNumber="0";
@@ -85,7 +83,7 @@ function equal() {
 
 function numberButton(number)   {
     lastNumber=undefined;
-    result2=undefined;
+    calculationResult=undefined;
     currentNumber=currentNumber=="0" ? number : currentNumber+number;
     numberButtonClicked=true;
     display(currentNumber);
@@ -93,7 +91,7 @@ function numberButton(number)   {
 
 function clearButton()  {
     numberButtonClicked=false;
-    result2=undefined;
+    calculationResult=undefined;
     currentNumber="0";
     decimalClick=false;
     numberStorage=undefined;
