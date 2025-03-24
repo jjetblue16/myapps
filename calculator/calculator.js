@@ -8,6 +8,10 @@ let decimalClick=false;
 
 let lastNumber;
 
+let result2;
+
+let numberButtonClicked=false;
+
 function decimal()  {
     if(decimalClick==false) {
         currentNumber=currentNumber+".";
@@ -31,50 +35,65 @@ function negate()   {
 }
 
 function operatorClicked(operator)  {
-    if(numberStorage==undefined)    {
-        numberStorage=currentNumber;
-        currentNumber=0;
+    if(numberStorage==undefined || result2!=undefined)    {
+        if(result2!=undefined)  {
+            numberStorage=result2;
+            result2=undefined;
+        }
+        else    {
+            numberStorage=currentNumber;
+        }
+        currentNumber="0";
         decimalClick=false;
     }
     else    {
         numberStorage=equal();
     }
+    numberButtonClicked=false;
     whatOperatorClicked=operator;
 }
 
 function equal() {
-    let result;
-    decimalClick=false;
-    if (lastNumber!=undefined) {
-        currentNumber=lastNumber;
-        lastNumber=undefined;
+    if(numberStorage!=undefined && whatOperatorClicked!=undefined && numberButtonClicked==true)    {
+        let result;
+        decimalClick=false;
+        if (lastNumber!=undefined) {
+            currentNumber=lastNumber;
+            lastNumber=undefined;
+        }
+        if (whatOperatorClicked=="add") {
+            result=decimalOperation(numberStorage, currentNumber, "add")
+        }
+        else if (whatOperatorClicked=="minus") {
+            result=decimalOperation(numberStorage, currentNumber, "minus");
+        }
+        else if (whatOperatorClicked=="multi") {
+            result=decimalOperation(numberStorage, currentNumber, "multi");
+        }
+        else if (whatOperatorClicked=="divide") {
+            result=decimalOperation(numberStorage, currentNumber, "divide");
+        }
+        numberStorage=result;
+        result2=result;
+        lastNumber=currentNumber;
+        display(result);
+        currentNumber="0";
+        return result;
     }
-    if (whatOperatorClicked=="add") {
-        result=decimalOperation(numberStorage, currentNumber, "add")
-    }
-    else if (whatOperatorClicked=="minus") {
-        result=decimalOperation(numberStorage, currentNumber, "minus");
-    }
-    else if (whatOperatorClicked=="multi") {
-        result=decimalOperation(numberStorage, currentNumber, "multi");
-    }
-    else if (whatOperatorClicked=="divide") {
-        result=decimalOperation(numberStorage, currentNumber, "divide");
-    }
-    numberStorage=result;
-    lastNumber=currentNumber;
-    display(result);
-    currentNumber = "0";
-    return result;
+    return numberStorage;
 }
 
 function numberButton(number)   {
-    lastNumber=undefined;    
+    lastNumber=undefined;
+    result2=undefined;
     currentNumber=currentNumber=="0" ? number : currentNumber+number;
+    numberButtonClicked=true;
     display(currentNumber);
 }
 
 function clearButton()  {
+    numberButtonClicked=false;
+    result2=undefined;
     currentNumber="0";
     decimalClick=false;
     numberStorage=undefined;
