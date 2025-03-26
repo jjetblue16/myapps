@@ -11,9 +11,11 @@ let calculationResult;
 let numberButtonClicked=false;
 
 function decimal()  {
-    if(!currentNumber.includes(".")) {
+    console.log(currentNumber);
+    if(currentNumber.indexOf(".")==-1) {
         currentNumber=currentNumber+".";
         display(currentNumber);
+        console.log(currentNumber);
     }
 }
 
