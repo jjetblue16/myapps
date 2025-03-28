@@ -14,7 +14,19 @@
     margin: auto;
 }
 
+.snake  {
+    background-color: green;
+    position: absolute;
+}
+
 body    {
     margin: 0;
     padding: 0;
+}
+
+.box    {
+    background-color: blue;
+    position: absolute;
+    border: 1px black solid;
+    display: inline-block;
 }
