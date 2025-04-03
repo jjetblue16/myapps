@@ -17,13 +17,50 @@ let movingInterval=40;
 
 let movingDirection;
 
-let distanceTop;
-let distanceLeft;
-
 let rows;
 let cols;
 
+let direction;
+let nextDirection;
+
+let firstMove=true;
+
+let currentRow=10;
+let currentColumn=15;
+
 document.addEventListener('DOMContentLoaded', start);
+document.addEventListener('keydown', (e)=>{
+    switch (e.key) {
+        case "ArrowUp":
+            nextDirection="up";
+            if(firstMove) {
+                setInterval(move, movingInterval);
+                firstMove=false;
+            }
+            break;
+        case "ArrowDown":
+            nextDirection="down";
+            if(firstMove) {
+                setInterval(move, movingInterval);
+                firstMove=false;
+            }
+            break;
+        case "ArrowLeft":
+            nextDirection="left";
+            if(firstMove) {
+                setInterval(move, movingInterval);
+                firstMove=false;
+            }
+            break;
+        case "ArrowRight":
+            nextDirection="right";
+            if(firstMove) {
+                setInterval(move, movingInterval);
+                firstMove=false;
+            }
+            break;
+    }
+})
 
 function start()    {
     playBox=document.getElementById("playBox");
@@ -39,7 +76,7 @@ function start()    {
     cols=playBoxHeight/snakeBoxSize;
     rows=playBoxWidth/snakeBoxSize;
     drawGrid();
-    fillBox(10, 10);
+    fillBox(currentRow, currentColumn);
 }
 
 function drawSnake(row, col)    {
@@ -51,14 +88,14 @@ function drawSnake(row, col)    {
 
 function drawGrid() {
     for(let a=0; a<rows; a++)   {
-        for(b=0; b<cols; b++)   {
+        for(let b=0; b<cols; b++)   {
             let box=document.createElement('div');
             box.style.height=snakeBoxSize;
             box.style.width=snakeBoxSize;
             box.className="box";
             box.style.top=b*snakeBoxSize+"px";
             box.style.left=a*snakeBoxSize+"px";
-            box.id="box "+a+","+b;
+            box.id=getBlockId(b, a);
             playBox.appendChild(box);
         }
     }
@@ -69,6 +106,38 @@ function getBlockId(row, col)   {
 }
 
 function fillBox(row, col)  {
-    let box=document.getElementById(getBlockId(row, col))
+    let box=document.getElementById(getBlockId(row, col));
     box.style.backgroundColor="red";
+}
+
+function clearBox(row, col) {
+    let box=document.getElementById(getBlockId(row, col));
+    box.style.backgroundColor="transparent";
+}
+
+function move() {
+    if(nextDirection=="right" && direction!="left")  {
+        clearBox(currentRow, currentColumn);
+        currentColumn=currentColumn+1;
+        fillBox(currentRow, currentColumn);
+        direction="right"
+    }
+    else if(nextDirection=="left" && direction!="right")  {
+        clearBox(currentRow, currentColumn);
+        currentColumn=currentColumn-1;
+        fillBox(currentRow, currentColumn);
+        direction="left"
+    }
+    else if(nextDirection=="up" && direction!="down")  {
+        clearBox(currentRow, currentColumn);
+        currentRow=currentRow-1;
+        fillBox(currentRow, currentColumn);
+        direction="up"
+    }
+    else if(nextDirection=="down" && direction!="up")  {
+        clearBox(currentRow, currentColumn);
+        currentRow=currentRow+1;
+        fillBox(currentRow, currentColumn);
+        direction="down"
+    }
 }
