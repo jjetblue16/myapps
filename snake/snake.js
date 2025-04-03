@@ -13,14 +13,11 @@ let minBorderSize=50;
 
 let movingSteps=5;
 
-let movingInterval=40;
-
-let movingDirection;
+let movingInterval=80;
 
 let rows;
 let cols;
 
-let direction;
 let nextDirection;
 
 let firstMove=true;
@@ -28,34 +25,36 @@ let firstMove=true;
 let currentRow=10;
 let currentColumn=15;
 
+let interval;
+
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keydown', (e)=>{
     switch (e.key) {
         case "ArrowUp":
-            nextDirection="up";
+            nextDirection=nextDirection!="down" ? "up" : nextDirection;
             if(firstMove) {
-                setInterval(move, movingInterval);
+                interval=setInterval(move, movingInterval);
                 firstMove=false;
             }
             break;
         case "ArrowDown":
-            nextDirection="down";
+            nextDirection=nextDirection!="up" ? "down" : nextDirection;
             if(firstMove) {
-                setInterval(move, movingInterval);
+                interval=setInterval(move, movingInterval);
                 firstMove=false;
             }
             break;
         case "ArrowLeft":
-            nextDirection="left";
+            nextDirection=nextDirection!="right" ? "left" : nextDirection;
             if(firstMove) {
-                setInterval(move, movingInterval);
+                interval=setInterval(move, movingInterval);
                 firstMove=false;
             }
             break;
         case "ArrowRight":
-            nextDirection="right";
+            nextDirection=nextDirection!="left" ? "right" : nextDirection;
             if(firstMove) {
-                setInterval(move, movingInterval);
+                interval=setInterval(move, movingInterval);
                 firstMove=false;
             }
             break;
@@ -73,8 +72,8 @@ function start()    {
     playBox.style.height=playBoxHeight+"px";
     playBox.style.width=playBoxWidth+"px";
     console.log(playBoxWidth+","+playBoxHeight)
-    cols=playBoxHeight/snakeBoxSize;
-    rows=playBoxWidth/snakeBoxSize;
+    cols=playBoxWidth/snakeBoxSize;
+    rows=playBoxHeight/snakeBoxSize;
     drawGrid();
     fillBox(currentRow, currentColumn);
 }
@@ -87,12 +86,20 @@ function drawSnake(row, col)    {
 }
 
 function drawGrid() {
-    for(let a=0; a<rows; a++)   {
-        for(let b=0; b<cols; b++)   {
+    let colorCounter=0;
+    for(let a=0; a<cols; a++)   {
+        colorCounter++;
+        for(let b=0; b<rows; b++)   {
+            colorCounter++;
             let box=document.createElement('div');
+            if(colorCounter%2==0)   {
+                box.className="box green"
+            }
+            else    {
+                box.className="box lime";
+            }
             box.style.height=snakeBoxSize;
             box.style.width=snakeBoxSize;
-            box.className="box";
             box.style.top=b*snakeBoxSize+"px";
             box.style.left=a*snakeBoxSize+"px";
             box.id=getBlockId(b, a);
@@ -116,28 +123,62 @@ function clearBox(row, col) {
 }
 
 function move() {
-    if(nextDirection=="right" && direction!="left")  {
-        clearBox(currentRow, currentColumn);
-        currentColumn=currentColumn+1;
-        fillBox(currentRow, currentColumn);
-        direction="right"
+    if(nextDirection=="right")  {
+        if(currentColumn+1<cols)    {
+            clearBox(currentRow, currentColumn);
+            currentColumn=currentColumn+1;
+            fillBox(currentRow, currentColumn);
+        }
+        else    {
+            gameOver();
+        }
     }
-    else if(nextDirection=="left" && direction!="right")  {
-        clearBox(currentRow, currentColumn);
-        currentColumn=currentColumn-1;
-        fillBox(currentRow, currentColumn);
-        direction="left"
+    else if(nextDirection=="left")  {
+        if(!currentColumn-1<0)  {
+            clearBox(currentRow, currentColumn);
+            currentColumn=currentColumn-1;
+            fillBox(currentRow, currentColumn);
+        }
+        else    {
+            gameOver();
+        }
     }
-    else if(nextDirection=="up" && direction!="down")  {
-        clearBox(currentRow, currentColumn);
-        currentRow=currentRow-1;
-        fillBox(currentRow, currentColumn);
-        direction="up"
+    else if(nextDirection=="up")  {
+        if(!currentRow-1<0) {
+            clearBox(currentRow, currentColumn);
+            currentRow=currentRow-1;
+            fillBox(currentRow, currentColumn);
+        }
+        else    {
+            gameOver();
+        }
     }
-    else if(nextDirection=="down" && direction!="up")  {
-        clearBox(currentRow, currentColumn);
-        currentRow=currentRow+1;
-        fillBox(currentRow, currentColumn);
-        direction="down"
+    else if(nextDirection=="down")  {
+        if(currentRow+1<rows)  {
+            clearBox(currentRow, currentColumn);
+            currentRow=currentRow+1;
+            fillBox(currentRow, currentColumn);
+        }
+        else    {
+            gameOver();
+        }
     }
+}
+
+function gameOver() {
+    clearInterval(interval);
+
+}
+
+function restart()  {
+    for(let a=0; a<cols; a++)   {
+        for(let b=0; b<rows; b++)   {
+            clearBox(b, a);
+        }
+    }
+    currentRow=10;
+    currentColumn=15;
+    fillBox(10, 15);
+    nextDirection=undefined;
+    firstMove=true;
 }

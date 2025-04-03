@@ -5,18 +5,12 @@
 }
 
 #playBox    {
-    background-color: white;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     position: absolute;
     margin: auto;
-}
-
-.snake  {
-    background-color: green;
-    position: absolute;
 }
 
 body    {
@@ -29,4 +23,17 @@ body    {
     position: absolute;
     border: 1px black solid;
     display: inline-block;
+}
+
+.green  {
+    background-color: green;
+}
+
+.lime   {
+    background-color: limegreen;
+}
+
+#loseScreen {
+    background-color: gray;
+    display: none;
 }
