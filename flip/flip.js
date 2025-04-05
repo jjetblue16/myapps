@@ -1,10 +1,5 @@
 function flip() {
-    let coin=document.getElementById("coin");
+    let side=document.getElementById("side");
     let randomSide=Math.floor(Math.random()*2);
-    if(randomSide==0)   {
-        coin.style.backgroundColor="red";
-    }
-    else    {
-        coin.style.backgroundColor="blue";
-    }
+    side.src=randomSide==0 ?"heads.png" :"tails.png";
 }
