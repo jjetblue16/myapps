@@ -1,0 +1,26 @@
+body    {
+    margin: 0;
+    padding: 0;
+}
+
+#coin   {
+    background-color: red;
+    width: 20%;
+    height: 20%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    margin: auto;
+}
+
+#theButton  {
+    width: 10%;
+    height: 10%;
+    bottom: 10%;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+}
