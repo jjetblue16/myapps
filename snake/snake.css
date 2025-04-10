@@ -19,18 +19,10 @@ body    {
 }
 
 .box    {
-    background-color: transparent;
+    background-color: limegreen;
     position: absolute;
     border: 1px black solid;
     display: inline-block;
-}
-
-.green  {
-    background-color: green;
-}
-
-.lime   {
-    background-color: limegreen;
 }
 
 #loseScreen {

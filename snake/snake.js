@@ -13,7 +13,9 @@ let minBorderSize=50;
 
 let movingSteps=5;
 
-let movingInterval=80;
+let movingInterval=90;
+
+let snakeLength=3;
 
 let rows;
 let cols;
@@ -26,6 +28,8 @@ let currentRow=10;
 let currentColumn=15;
 
 let interval;
+
+let snakeArray=[{theRow: 10, theCol: 15}];
 
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keydown', (e)=>{
@@ -78,26 +82,11 @@ function start()    {
     fillBox(currentRow, currentColumn);
 }
 
-function drawSnake(row, col)    {
-    let snakeBox=document.createElement('div');
-    snakeBox.className="snake";
-    snakeBox.style.height=snakeBoxSize+"px";
-    snakeBox.style.width=snakeBoxSize+"px";
-}
-
 function drawGrid() {
-    let colorCounter=0;
     for(let a=0; a<cols; a++)   {
-        colorCounter++;
         for(let b=0; b<rows; b++)   {
-            colorCounter++;
             let box=document.createElement('div');
-            if(colorCounter%2==0)   {
-                box.className="box green"
-            }
-            else    {
-                box.className="box lime";
-            }
+            box.className="box";
             box.style.height=snakeBoxSize;
             box.style.width=snakeBoxSize;
             box.style.top=b*snakeBoxSize+"px";
@@ -114,18 +103,23 @@ function getBlockId(row, col)   {
 
 function fillBox(row, col)  {
     let box=document.getElementById(getBlockId(row, col));
-    box.style.backgroundColor="red";
+    box.style.backgroundColor="mediumblue";
+    snakeArray.push({theRow: row, theCol: col});
 }
 
 function clearBox(row, col) {
     let box=document.getElementById(getBlockId(row, col));
-    box.style.backgroundColor="transparent";
+    box.style.backgroundColor="limegreen";
 }
 
 function move() {
+    if(snakeArray.length>=snakeLength)   {
+        let deleted=snakeArray[0];
+        snakeArray.shift();
+        clearBox(deleted.theRow, deleted.theCol);
+    }
     if(nextDirection=="right")  {
         if(currentColumn+1<cols)    {
-            clearBox(currentRow, currentColumn);
             currentColumn=currentColumn+1;
             fillBox(currentRow, currentColumn);
         }
@@ -135,7 +129,6 @@ function move() {
     }
     else if(nextDirection=="left")  {
         if(!currentColumn-1<0)  {
-            clearBox(currentRow, currentColumn);
             currentColumn=currentColumn-1;
             fillBox(currentRow, currentColumn);
         }
@@ -145,7 +138,6 @@ function move() {
     }
     else if(nextDirection=="up")  {
         if(!currentRow-1<0) {
-            clearBox(currentRow, currentColumn);
             currentRow=currentRow-1;
             fillBox(currentRow, currentColumn);
         }
@@ -155,7 +147,6 @@ function move() {
     }
     else if(nextDirection=="down")  {
         if(currentRow+1<rows)  {
-            clearBox(currentRow, currentColumn);
             currentRow=currentRow+1;
             fillBox(currentRow, currentColumn);
         }
@@ -167,7 +158,6 @@ function move() {
 
 function gameOver() {
     clearInterval(interval);
-
 }
 
 function restart()  {
