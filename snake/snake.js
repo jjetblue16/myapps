@@ -14,7 +14,7 @@ let minBorderSize=50;
 let movingSteps=4;
 let currentStep=0;
 
-let movingInterval=90;
+let movingInterval=40;
 
 let snakeLength=3;
 
@@ -95,7 +95,7 @@ function drawGrid() {
             let box=document.createElement('div');
             let innerBox=document.createElement('div');
             box.className="box";
-            innerBox.classname="innerBox";
+            innerBox.className="innerBox";
             innerBox.style.height="100%";
             innerBox.style.width="100%";
             box.style.height=snakeBoxSize;
@@ -126,19 +126,20 @@ function clearBox(row, col) {
 
 function move() {
     if(snakeArray.length>=snakeLength)   {
-        let deleted=snakeArray[0];
-        snakeArray.shift();
+        let deleted=snakeArray.shift();
         clearBox(deleted.theRow, deleted.theCol);
     }
     if(nextDirection=="right")  {
         if(currentColumn+1<cols)    {
             currentDirection=nextDirection;
+            fillBoxFromEdge(currentRow, currentColumn, "left", currentStep*(100/movingSteps))
             if(currentStep==movingSteps)    {
                 currentColumn=currentColumn+1;
                 currentStep=0;
             }
-            fillBox(currentRow, currentColumn);
-            currentStep++;
+            else    {
+                currentStep++;
+            }
         }
         else    {
             gameOver();
@@ -147,12 +148,14 @@ function move() {
     else if(nextDirection=="left")  {
         if(!currentColumn-1<0)  {
             currentDirection=nextDirection;
+            fillBoxFromEdge(currentRow, currentColumn, "right", currentStep*(100/movingSteps))
             if(currentStep==movingSteps)    {
                 currentColumn=currentColumn-1;
                 currentStep=0;
             }
-            fillBox(currentRow, currentColumn);
-            currentStep++;
+            else    {
+                currentStep++;
+            }
         }
         else    {
             gameOver();
@@ -161,12 +164,14 @@ function move() {
     else if(nextDirection=="up")  {
         if(!currentRow-1<0) {
             currentDirection=nextDirection;
+            fillBoxFromEdge(currentRow, currentColumn, "bottom", currentStep*(100/movingSteps))
             if(currentStep==movingSteps)    {
                 currentRow=currentRow-1;
                 currentStep=0;
-            }    
-            fillBox(currentRow, currentColumn);
-            currentStep++;
+            }
+            else    {
+                currentStep++;
+            }
         }
         else    {
             gameOver();
@@ -175,17 +180,40 @@ function move() {
     else if(nextDirection=="down")  {
         if(currentRow+1<rows)  {
             currentDirection=nextDirection;
+            fillBoxFromEdge(currentRow, currentColumn, "top", currentStep*(100/movingSteps))
             if(currentStep==movingSteps)    {
                 currentRow=currentRow+1;
                 currentStep=0;
             }
-            fillBox(currentRow, currentColumn);
-            currentStep++;
+            else    {
+                currentStep++;
+            }
         }
         else    {
             gameOver();
         }
     }
+}
+
+function fillBoxFromEdge(row, col, fromEdge, percentage) {
+    let miniBox=document.getElementById(getBlockId(row, col));
+    if(fromEdge=="right")   {
+        miniBox.style.left=100-percentage+"%";
+        miniBox.style.width=percentage+"%";
+    }
+    else if(fromEdge=="left")   {
+        miniBox.style.left="0";
+        miniBox.style.width=percentage+"%";
+    }
+    else if(fromEdge=="top") {
+        miniBox.style.top="0";
+        miniBox.style.height=percentage+"%";
+    }
+    else if(fromEdge=="bottom") {
+        miniBox.style.top=100-percentage+"%";
+        miniBox.style.height=percentage+"%";
+    }
+    miniBox.style.backgroundColor="mediumblue";
 }
 
 function gameOver() {
