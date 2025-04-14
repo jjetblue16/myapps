@@ -29,3 +29,9 @@ body    {
     background-color: gray;
     display: none;
 }
+
+.innerBox   {
+    background-color: mediumblue;
+    position: relative;
+    display: inline-block;
+}

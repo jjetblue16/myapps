@@ -11,7 +11,8 @@ let playBoxWidth;
 
 let minBorderSize=50;
 
-let movingSteps=5;
+let movingSteps=4;
+let currentStep=0;
 
 let movingInterval=90;
 
@@ -20,6 +21,7 @@ let snakeLength=3;
 let rows;
 let cols;
 
+let currentDirection;
 let nextDirection;
 
 let firstMove=true;
@@ -31,8 +33,12 @@ let interval;
 
 let snakeArray=[{theRow: 10, theCol: 15}];
 
+let sound;
+
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keydown', (e)=>{
+    sound.load();
+    sound.play();
     switch (e.key) {
         case "ArrowUp":
             nextDirection=nextDirection!="down" ? "up" : nextDirection;
@@ -66,6 +72,7 @@ document.addEventListener('keydown', (e)=>{
 })
 
 function start()    {
+    sound=new Audio('turn.mp3');
     playBox=document.getElementById("playBox");
     background=document.getElementById("background");
     let size=background.getBoundingClientRect();
@@ -86,13 +93,18 @@ function drawGrid() {
     for(let a=0; a<cols; a++)   {
         for(let b=0; b<rows; b++)   {
             let box=document.createElement('div');
+            let innerBox=document.createElement('div');
             box.className="box";
+            innerBox.classname="innerBox";
+            innerBox.style.height="100%";
+            innerBox.style.width="100%";
             box.style.height=snakeBoxSize;
             box.style.width=snakeBoxSize;
             box.style.top=b*snakeBoxSize+"px";
             box.style.left=a*snakeBoxSize+"px";
-            box.id=getBlockId(b, a);
+            innerBox.id=getBlockId(b, a);
             playBox.appendChild(box);
+            box.appendChild(innerBox);
         }
     }
 }
@@ -120,8 +132,13 @@ function move() {
     }
     if(nextDirection=="right")  {
         if(currentColumn+1<cols)    {
-            currentColumn=currentColumn+1;
+            currentDirection=nextDirection;
+            if(currentStep==movingSteps)    {
+                currentColumn=currentColumn+1;
+                currentStep=0;
+            }
             fillBox(currentRow, currentColumn);
+            currentStep++;
         }
         else    {
             gameOver();
@@ -129,8 +146,13 @@ function move() {
     }
     else if(nextDirection=="left")  {
         if(!currentColumn-1<0)  {
-            currentColumn=currentColumn-1;
+            currentDirection=nextDirection;
+            if(currentStep==movingSteps)    {
+                currentColumn=currentColumn-1;
+                currentStep=0;
+            }
             fillBox(currentRow, currentColumn);
+            currentStep++;
         }
         else    {
             gameOver();
@@ -138,8 +160,13 @@ function move() {
     }
     else if(nextDirection=="up")  {
         if(!currentRow-1<0) {
-            currentRow=currentRow-1;
+            currentDirection=nextDirection;
+            if(currentStep==movingSteps)    {
+                currentRow=currentRow-1;
+                currentStep=0;
+            }    
             fillBox(currentRow, currentColumn);
+            currentStep++;
         }
         else    {
             gameOver();
@@ -147,8 +174,13 @@ function move() {
     }
     else if(nextDirection=="down")  {
         if(currentRow+1<rows)  {
-            currentRow=currentRow+1;
+            currentDirection=nextDirection;
+            if(currentStep==movingSteps)    {
+                currentRow=currentRow+1;
+                currentStep=0;
+            }
             fillBox(currentRow, currentColumn);
+            currentStep++;
         }
         else    {
             gameOver();
