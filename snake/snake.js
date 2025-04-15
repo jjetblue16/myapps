@@ -14,7 +14,7 @@ let minBorderSize=50;
 let movingSteps=4;
 let currentStep=0;
 
-let movingInterval=40;
+let movingInterval=300;
 
 let snakeLength=3;
 
@@ -43,6 +43,7 @@ document.addEventListener('keydown', (e)=>{
         case "ArrowUp":
             nextDirection=nextDirection!="down" ? "up" : nextDirection;
             if(firstMove) {
+                currentDirection=nextDirection;
                 interval=setInterval(move, movingInterval);
                 firstMove=false;
             }
@@ -50,6 +51,7 @@ document.addEventListener('keydown', (e)=>{
         case "ArrowDown":
             nextDirection=nextDirection!="up" ? "down" : nextDirection;
             if(firstMove) {
+                currentDirection=nextDirection;
                 interval=setInterval(move, movingInterval);
                 firstMove=false;
             }
@@ -57,6 +59,7 @@ document.addEventListener('keydown', (e)=>{
         case "ArrowLeft":
             nextDirection=nextDirection!="right" ? "left" : nextDirection;
             if(firstMove) {
+                currentDirection=nextDirection;
                 interval=setInterval(move, movingInterval);
                 firstMove=false;
             }
@@ -64,6 +67,7 @@ document.addEventListener('keydown', (e)=>{
         case "ArrowRight":
             nextDirection=nextDirection!="left" ? "right" : nextDirection;
             if(firstMove) {
+                currentDirection=nextDirection;
                 interval=setInterval(move, movingInterval);
                 firstMove=false;
             }
@@ -129,65 +133,67 @@ function move() {
         let deleted=snakeArray.shift();
         clearBox(deleted.theRow, deleted.theCol);
     }
-    if(nextDirection=="right")  {
+    if(currentDirection=="right")  {
         if(currentColumn+1<cols)    {
-            currentDirection=nextDirection;
-            fillBoxFromEdge(currentRow, currentColumn, "left", currentStep*(100/movingSteps))
             if(currentStep==movingSteps)    {
                 currentColumn=currentColumn+1;
                 currentStep=0;
+                currentDirection=nextDirection;
             }
             else    {
                 currentStep++;
             }
+            fillBoxFromEdge(currentRow, currentColumn, "left", currentStep*(100/movingSteps));
         }
         else    {
             gameOver();
         }
     }
-    else if(nextDirection=="left")  {
+    else if(currentDirection=="left")  {
         if(!currentColumn-1<0)  {
-            currentDirection=nextDirection;
-            fillBoxFromEdge(currentRow, currentColumn, "right", currentStep*(100/movingSteps))
             if(currentStep==movingSteps)    {
                 currentColumn=currentColumn-1;
                 currentStep=0;
+                currentDirection=nextDirection;
             }
             else    {
                 currentStep++;
             }
+            fillBoxFromEdge(currentRow, currentColumn, "right", currentStep*(100/movingSteps));
+
         }
         else    {
             gameOver();
         }
     }
-    else if(nextDirection=="up")  {
+    else if(currentDirection=="up")  {
         if(!currentRow-1<0) {
-            currentDirection=nextDirection;
-            fillBoxFromEdge(currentRow, currentColumn, "bottom", currentStep*(100/movingSteps))
             if(currentStep==movingSteps)    {
                 currentRow=currentRow-1;
                 currentStep=0;
+                currentDirection=nextDirection;
             }
             else    {
                 currentStep++;
             }
+            fillBoxFromEdge(currentRow, currentColumn, "bottom", currentStep*(100/movingSteps));
+
         }
         else    {
             gameOver();
         }
     }
-    else if(nextDirection=="down")  {
+    else if(currentDirection=="down")  {
         if(currentRow+1<rows)  {
-            currentDirection=nextDirection;
-            fillBoxFromEdge(currentRow, currentColumn, "top", currentStep*(100/movingSteps))
             if(currentStep==movingSteps)    {
                 currentRow=currentRow+1;
                 currentStep=0;
+                currentDirection=nextDirection;
             }
             else    {
                 currentStep++;
             }
+            fillBoxFromEdge(currentRow, currentColumn, "top", currentStep*(100/movingSteps));
         }
         else    {
             gameOver();
