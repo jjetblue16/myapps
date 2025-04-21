@@ -14,7 +14,7 @@ let minBorderSize=50;
 let movingSteps=4;
 let currentStep=0;
 
-let movingInterval=300;
+let movingInterval=40;
 
 let snakeLength=3;
 
@@ -35,43 +35,56 @@ let snakeArray=[{theRow: 10, theCol: 15}];
 
 let sound;
 
+let isBoxFill=false;
+
+let lockDirection=false;
+
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keydown', (e)=>{
     sound.load();
-    sound.play();
-    switch (e.key) {
-        case "ArrowUp":
-            nextDirection=nextDirection!="down" ? "up" : nextDirection;
-            if(firstMove) {
-                currentDirection=nextDirection;
-                interval=setInterval(move, movingInterval);
-                firstMove=false;
-            }
-            break;
-        case "ArrowDown":
-            nextDirection=nextDirection!="up" ? "down" : nextDirection;
-            if(firstMove) {
-                currentDirection=nextDirection;
-                interval=setInterval(move, movingInterval);
-                firstMove=false;
-            }
-            break;
-        case "ArrowLeft":
-            nextDirection=nextDirection!="right" ? "left" : nextDirection;
-            if(firstMove) {
-                currentDirection=nextDirection;
-                interval=setInterval(move, movingInterval);
-                firstMove=false;
-            }
-            break;
-        case "ArrowRight":
-            nextDirection=nextDirection!="left" ? "right" : nextDirection;
-            if(firstMove) {
-                currentDirection=nextDirection;
-                interval=setInterval(move, movingInterval);
-                firstMove=false;
-            }
-            break;
+    if(lockDirection==false)    {
+        switch (e.key) {
+            case "ArrowUp":
+                nextDirection=nextDirection!="down" ? "up" : nextDirection;
+                lockDirection=true;
+                sound.play();
+                if(firstMove) {
+                    currentDirection=nextDirection;
+                    interval=setInterval(move, movingInterval);
+                    firstMove=false;
+                }
+                break;
+            case "ArrowDown":
+                nextDirection=nextDirection!="up" ? "down" : nextDirection;
+                lockDirection=true;
+                sound.play();
+                if(firstMove) {
+                    currentDirection=nextDirection;
+                    interval=setInterval(move, movingInterval);
+                    firstMove=false;
+                }
+                break;
+            case "ArrowLeft":
+                nextDirection=nextDirection!="right" ? "left" : nextDirection;
+                lockDirection=true;
+                sound.play();
+                if(firstMove) {
+                    currentDirection=nextDirection;
+                    interval=setInterval(move, movingInterval);
+                    firstMove=false;
+                }
+                break;
+            case "ArrowRight":
+                nextDirection=nextDirection!="left" ? "right" : nextDirection;
+                lockDirection=true;
+                sound.play();
+                if(firstMove) {
+                    currentDirection=nextDirection;
+                    interval=setInterval(move, movingInterval);
+                    firstMove=false;
+                }
+                break;
+        }
     }
 })
 
@@ -134,66 +147,87 @@ function move() {
         clearBox(deleted.theRow, deleted.theCol);
     }
     if(currentDirection=="right")  {
-        if(currentColumn+1<cols)    {
+        if(currentColumn<cols)    {
             if(currentStep==movingSteps)    {
-                currentColumn=currentColumn+1;
-                currentStep=0;
+                lockDirection=false;
+                currentColumn=currentDirection==nextDirection ? currentColumn+1 : currentColumn;
+                isBoxFill=currentDirection==nextDirection ? false : true;
                 currentDirection=nextDirection;
+                currentStep=0;
             }
             else    {
+                currentColumn=isBoxFill ? currentColumn+1 : currentColumn;
                 currentStep++;
+                isBoxFill=false;
             }
-            fillBoxFromEdge(currentRow, currentColumn, "left", currentStep*(100/movingSteps));
-        }
+            if(!isBoxFill) {
+                fillBoxFromEdge(currentRow, currentColumn, "left", currentStep*(100/movingSteps));
+            }        }
         else    {
             gameOver();
         }
     }
     else if(currentDirection=="left")  {
-        if(!currentColumn-1<0)  {
+        if(!currentColumn-2<0)  {
             if(currentStep==movingSteps)    {
-                currentColumn=currentColumn-1;
-                currentStep=0;
+                lockDirection=false;
+                currentColumn=currentDirection==nextDirection ? currentColumn-1 : currentColumn;
+                isBoxFill=currentDirection==nextDirection ? false : true;
                 currentDirection=nextDirection;
+                currentStep=0;
             }
             else    {
+                currentColumn=isBoxFill ? currentColumn-1 : currentColumn;
                 currentStep++;
+                isBoxFill=false;
             }
-            fillBoxFromEdge(currentRow, currentColumn, "right", currentStep*(100/movingSteps));
-
+            if(!isBoxFill) {
+                fillBoxFromEdge(currentRow, currentColumn, "right", currentStep*(100/movingSteps));
+            }
         }
         else    {
             gameOver();
         }
     }
     else if(currentDirection=="up")  {
-        if(!currentRow-1<0) {
+        if(!currentRow-2<0) {
             if(currentStep==movingSteps)    {
-                currentRow=currentRow-1;
-                currentStep=0;
+                lockDirection=false;
+                currentRow=currentDirection==nextDirection ? currentRow-1 : currentRow;
+                isBoxFill=currentDirection==nextDirection ? false : true;
                 currentDirection=nextDirection;
+                currentStep=0;
             }
             else    {
+                currentRow=isBoxFill ? currentRow-1 : currentRow;
                 currentStep++;
+                isBoxFill=false;
             }
-            fillBoxFromEdge(currentRow, currentColumn, "bottom", currentStep*(100/movingSteps));
-
+            if(!isBoxFill) {
+                fillBoxFromEdge(currentRow, currentColumn, "bottom", currentStep*(100/movingSteps));
+            }
         }
         else    {
             gameOver();
         }
     }
     else if(currentDirection=="down")  {
-        if(currentRow+1<rows)  {
+        if(currentRow<rows)  {
             if(currentStep==movingSteps)    {
-                currentRow=currentRow+1;
-                currentStep=0;
+                lockDirection=false;
+                currentRow=currentDirection==nextDirection ? currentRow+1 : currentRow;
+                isBoxFill=currentDirection==nextDirection ? false : true;
                 currentDirection=nextDirection;
+                currentStep=0;
             }
             else    {
+                currentRow=isBoxFill ? currentRow+1 : currentRow;
                 currentStep++;
+                isBoxFill=false;
             }
-            fillBoxFromEdge(currentRow, currentColumn, "top", currentStep*(100/movingSteps));
+            if(!isBoxFill) {
+                fillBoxFromEdge(currentRow, currentColumn, "top", currentStep*(100/movingSteps));
+            }        
         }
         else    {
             gameOver();
@@ -219,7 +253,38 @@ function fillBoxFromEdge(row, col, fromEdge, percentage) {
         miniBox.style.top=100-percentage+"%";
         miniBox.style.height=percentage+"%";
     }
+    if(percentage==100) {
+        snakeArray.push({theRow: row, theCol: col});
+    }
     miniBox.style.backgroundColor="mediumblue";
+    console.log(snakeArray);
+}
+
+function clearBoxFromEdge(row, col, fromEdge, percentage) {
+    let miniBox=document.getElementById(getBlockId(row, col));
+    if(fromEdge=="right") {
+        miniBox.style.left=100-percentage+"%";
+        miniBox.style.width=percentage + "%";
+    } 
+    else if(fromEdge=="left") {
+        miniBox.style.left="0";
+        miniBox.style.width=percentage+"%";
+    }
+    else if(fromEdge=="top") {
+        miniBox.style.top="0";
+        miniBox.style.height=percentage+"%";
+    }
+    else if(fromEdge=="bottom") {
+        miniBox.style.top=100-percentage+"%";
+        miniBox.style.height=percentage+"%";
+    }
+    if(percentage==0) {
+        miniBox.style.backgroundColor="transparent";
+        miniBox.style.width="100%";
+        miniBox.style.height="100%";
+        miniBox.style.left="0";
+        miniBox.style.top="0";
+    }
 }
 
 function gameOver() {
