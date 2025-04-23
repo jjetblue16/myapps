@@ -12,9 +12,9 @@ let playBoxWidth;
 let minBorderSize=50;
 
 let movingSteps=4;
-let currentStep=0;
+let currentStep=4;
 
-let movingInterval=40;
+let movingInterval=30;
 
 let snakeLength=3;
 
@@ -33,21 +33,19 @@ let interval;
 
 let snakeArray=[{theRow: 10, theCol: 15}];
 
-let sound;
+let lockDirection=false;
+
+let callTime=1;
 
 let isBoxFill=false;
 
-let lockDirection=false;
-
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keydown', (e)=>{
-    sound.load();
     if(lockDirection==false)    {
         switch (e.key) {
             case "ArrowUp":
                 nextDirection=nextDirection!="down" ? "up" : nextDirection;
                 lockDirection=true;
-                sound.play();
                 if(firstMove) {
                     currentDirection=nextDirection;
                     interval=setInterval(move, movingInterval);
@@ -57,7 +55,6 @@ document.addEventListener('keydown', (e)=>{
             case "ArrowDown":
                 nextDirection=nextDirection!="up" ? "down" : nextDirection;
                 lockDirection=true;
-                sound.play();
                 if(firstMove) {
                     currentDirection=nextDirection;
                     interval=setInterval(move, movingInterval);
@@ -67,7 +64,6 @@ document.addEventListener('keydown', (e)=>{
             case "ArrowLeft":
                 nextDirection=nextDirection!="right" ? "left" : nextDirection;
                 lockDirection=true;
-                sound.play();
                 if(firstMove) {
                     currentDirection=nextDirection;
                     interval=setInterval(move, movingInterval);
@@ -77,7 +73,6 @@ document.addEventListener('keydown', (e)=>{
             case "ArrowRight":
                 nextDirection=nextDirection!="left" ? "right" : nextDirection;
                 lockDirection=true;
-                sound.play();
                 if(firstMove) {
                     currentDirection=nextDirection;
                     interval=setInterval(move, movingInterval);
@@ -89,7 +84,6 @@ document.addEventListener('keydown', (e)=>{
 })
 
 function start()    {
-    sound=new Audio('turn.mp3');
     playBox=document.getElementById("playBox");
     background=document.getElementById("background");
     let size=background.getBoundingClientRect();
@@ -104,6 +98,7 @@ function start()    {
     rows=playBoxHeight/snakeBoxSize;
     drawGrid();
     fillBox(currentRow, currentColumn);
+    makeApple();
 }
 
 function drawGrid() {
@@ -119,6 +114,7 @@ function drawGrid() {
             box.style.width=snakeBoxSize;
             box.style.top=b*snakeBoxSize+"px";
             box.style.left=a*snakeBoxSize+"px";
+            box.id="outbox "+b+","+a;
             innerBox.id=getBlockId(b, a);
             playBox.appendChild(box);
             box.appendChild(innerBox);
@@ -142,9 +138,31 @@ function clearBox(row, col) {
 }
 
 function move() {
-    if(snakeArray.length>=snakeLength)   {
-        let deleted=snakeArray.shift();
-        clearBox(deleted.theRow, deleted.theCol);
+    if(snakeArray.length>snakeLength)   {
+        callTime++;
+        let deleted=snakeArray[0];
+        let nextBlock=snakeArray[1];
+        let tailSide;
+        if(nextBlock.theRow<deleted.theRow) {
+            tailSide="bottom";
+        }
+        else if(nextBlock.theRow>deleted.theRow) {
+            tailSide="top";
+        }
+        else if(nextBlock.theCol<deleted.theCol)    {
+            tailSide="right";
+        }
+        else if(nextBlock.theCol>deleted.theCol)    {
+            tailSide="left";
+        }
+        let percentage=callTime*(100/movingSteps);
+        clearBoxFromEdge(deleted.theRow, deleted.theCol, tailSide, percentage);
+        if(percentage>=100) {
+            snakeArray.shift();
+        }
+        if(callTime==movingSteps)   {
+            callTime=1;
+        }
     }
     if(currentDirection=="right")  {
         if(currentColumn<cols)    {
@@ -162,7 +180,8 @@ function move() {
             }
             if(!isBoxFill) {
                 fillBoxFromEdge(currentRow, currentColumn, "left", currentStep*(100/movingSteps));
-            }        }
+            }        
+        }
         else    {
             gameOver();
         }
@@ -233,6 +252,7 @@ function move() {
             gameOver();
         }
     }
+    eat(currentRow, currentColumn);
 }
 
 function fillBoxFromEdge(row, col, fromEdge, percentage) {
@@ -254,37 +274,37 @@ function fillBoxFromEdge(row, col, fromEdge, percentage) {
         miniBox.style.height=percentage+"%";
     }
     if(percentage==100) {
-        snakeArray.push({theRow: row, theCol: col});
+        snakeArray.push({theRow: row, theCol: col, edge: fromEdge});
     }
     miniBox.style.backgroundColor="mediumblue";
-    console.log(snakeArray);
 }
 
 function clearBoxFromEdge(row, col, fromEdge, percentage) {
     let miniBox=document.getElementById(getBlockId(row, col));
     if(fromEdge=="right") {
-        miniBox.style.left=100-percentage+"%";
-        miniBox.style.width=percentage + "%";
+        miniBox.style.left="0";
+        miniBox.style.width=100-percentage+"%";
     } 
     else if(fromEdge=="left") {
-        miniBox.style.left="0";
-        miniBox.style.width=percentage+"%";
+        miniBox.style.left=percentage+"%";
+        miniBox.style.width=100-percentage+"%";
     }
     else if(fromEdge=="top") {
-        miniBox.style.top="0";
-        miniBox.style.height=percentage+"%";
+        miniBox.style.top=percentage+"%";
+        miniBox.style.height=100-percentage+"%";
     }
     else if(fromEdge=="bottom") {
-        miniBox.style.top=100-percentage+"%";
-        miniBox.style.height=percentage+"%";
+        miniBox.style.top="0";
+        miniBox.style.height=100-percentage+"%";
     }
-    if(percentage==0) {
+    if(percentage==100) {
         miniBox.style.backgroundColor="transparent";
         miniBox.style.width="100%";
         miniBox.style.height="100%";
         miniBox.style.left="0";
         miniBox.style.top="0";
     }
+    console.log(percentage);
 }
 
 function gameOver() {
@@ -302,4 +322,25 @@ function restart()  {
     fillBox(10, 15);
     nextDirection=undefined;
     firstMove=true;
+}
+
+function makeApple()    {
+    let row=Math.floor(Math.random()*rows);
+    let col=Math.floor(Math.random()*cols);
+    let apple=document.getElementById(getBlockId(row, col));
+    while(apple.style.backgroundColor=="mediumblue")   {
+        row=Math.floor(Math.random()*rows);
+        col=Math.floor(Math.random()*cols);
+    }
+    let appleBox=document.getElementById("outbox "+row+","+col);
+    appleBox.style.backgroundColor="red";
+}
+
+function eat(row, col)  {
+    let apple=document.getElementById("outbox "+row+","+col);
+    if(apple.style.backgroundColor=="red")  {
+        apple.style.backgroundColor="limegreen";
+        snakeLength=snakeLength+2;
+        makeApple();
+    }
 }
