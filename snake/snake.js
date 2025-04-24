@@ -144,20 +144,21 @@ function move() {
         let nextBlock=snakeArray[1];
         let tailSide;
         if(nextBlock.theRow<deleted.theRow) {
-            tailSide="bottom";
-        }
-        else if(nextBlock.theRow>deleted.theRow) {
             tailSide="top";
         }
-        else if(nextBlock.theCol<deleted.theCol)    {
-            tailSide="right";
+        else if(nextBlock.theRow>deleted.theRow) {
+            tailSide="bottom";
         }
-        else if(nextBlock.theCol>deleted.theCol)    {
+        else if(nextBlock.theCol<deleted.theCol)    {
             tailSide="left";
         }
-        let percentage=callTime*(100/movingSteps);
-        clearBoxFromEdge(deleted.theRow, deleted.theCol, tailSide, percentage);
-        if(percentage>=100) {
+        else if(nextBlock.theCol>deleted.theCol)    {
+            tailSide="right";
+        }
+        let percentage=100-callTime*(100/movingSteps);
+        console.log(percentage);
+        fillBoxFromEdge(deleted.theRow, deleted.theCol, tailSide, percentage);
+        if(percentage==0) {
             snakeArray.shift();
         }
         if(callTime==movingSteps)   {
@@ -180,7 +181,10 @@ function move() {
             }
             if(!isBoxFill) {
                 fillBoxFromEdge(currentRow, currentColumn, "left", currentStep*(100/movingSteps));
-            }        
+                if(currentStep==movingSteps) {
+                    snakeArray.push({theRow: currentRow, theCol: currentColumn});
+                }
+            }
         }
         else    {
             gameOver();
@@ -202,6 +206,9 @@ function move() {
             }
             if(!isBoxFill) {
                 fillBoxFromEdge(currentRow, currentColumn, "right", currentStep*(100/movingSteps));
+                if(currentStep==movingSteps) {
+                    snakeArray.push({theRow: currentRow, theCol: currentColumn});
+                }
             }
         }
         else    {
@@ -224,6 +231,9 @@ function move() {
             }
             if(!isBoxFill) {
                 fillBoxFromEdge(currentRow, currentColumn, "bottom", currentStep*(100/movingSteps));
+                if(currentStep==movingSteps) {
+                    snakeArray.push({theRow: currentRow, theCol: currentColumn});
+                }
             }
         }
         else    {
@@ -246,6 +256,9 @@ function move() {
             }
             if(!isBoxFill) {
                 fillBoxFromEdge(currentRow, currentColumn, "top", currentStep*(100/movingSteps));
+                if(currentStep==movingSteps) {
+                    snakeArray.push({theRow: currentRow, theCol: currentColumn});
+                }
             }        
         }
         else    {
@@ -253,6 +266,9 @@ function move() {
         }
     }
     eat(currentRow, currentColumn);
+    if(callTime>1)  {
+        dieIntoBody();
+    }
 }
 
 function fillBoxFromEdge(row, col, fromEdge, percentage) {
@@ -273,38 +289,7 @@ function fillBoxFromEdge(row, col, fromEdge, percentage) {
         miniBox.style.top=100-percentage+"%";
         miniBox.style.height=percentage+"%";
     }
-    if(percentage==100) {
-        snakeArray.push({theRow: row, theCol: col, edge: fromEdge});
-    }
     miniBox.style.backgroundColor="mediumblue";
-}
-
-function clearBoxFromEdge(row, col, fromEdge, percentage) {
-    let miniBox=document.getElementById(getBlockId(row, col));
-    if(fromEdge=="right") {
-        miniBox.style.left="0";
-        miniBox.style.width=100-percentage+"%";
-    } 
-    else if(fromEdge=="left") {
-        miniBox.style.left=percentage+"%";
-        miniBox.style.width=100-percentage+"%";
-    }
-    else if(fromEdge=="top") {
-        miniBox.style.top=percentage+"%";
-        miniBox.style.height=100-percentage+"%";
-    }
-    else if(fromEdge=="bottom") {
-        miniBox.style.top="0";
-        miniBox.style.height=100-percentage+"%";
-    }
-    if(percentage==100) {
-        miniBox.style.backgroundColor="transparent";
-        miniBox.style.width="100%";
-        miniBox.style.height="100%";
-        miniBox.style.left="0";
-        miniBox.style.top="0";
-    }
-    console.log(percentage);
 }
 
 function gameOver() {
@@ -342,5 +327,16 @@ function eat(row, col)  {
         apple.style.backgroundColor="limegreen";
         snakeLength=snakeLength+2;
         makeApple();
+    }
+}
+
+function dieIntoBody() {
+    let head=snakeArray[snakeArray.length-1];
+    for (let i=0; i<snakeArray.length-1; i++) {
+        let body=snakeArray[i];
+        if(body.theRow===head.theRow && body.theCol===head.theCol) {
+            gameOver();
+            console.log("bleh");
+        }
     }
 }
