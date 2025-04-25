@@ -126,15 +126,16 @@ function getBlockId(row, col)   {
     return "box "+row+","+col;
 }
 
-function fillBox(row, col)  {
-    let box=document.getElementById(getBlockId(row, col));
-    box.style.backgroundColor="mediumblue";
-    snakeArray.push({theRow: row, theCol: col});
-}
-
 function clearBox(row, col) {
     let box=document.getElementById(getBlockId(row, col));
-    box.style.backgroundColor="limegreen";
+    box.style.backgroundColor="transparent";
+}
+
+function fillBox(row, col)  {
+    let box=document.getElementById(getBlockId(row, col));
+    box.style.width="100%";
+    box.style.height="100%";
+    box.style.backgroundColor="mediumblue";
 }
 
 function move() {
@@ -156,7 +157,6 @@ function move() {
             tailSide="right";
         }
         let percentage=100-callTime*(100/movingSteps);
-        console.log(percentage);
         fillBoxFromEdge(deleted.theRow, deleted.theCol, tailSide, percentage);
         if(percentage==0) {
             snakeArray.shift();
@@ -191,7 +191,7 @@ function move() {
         }
     }
     else if(currentDirection=="left")  {
-        if(!currentColumn-2<0)  {
+        if(currentColumn>=0)  {
             if(currentStep==movingSteps)    {
                 lockDirection=false;
                 currentColumn=currentDirection==nextDirection ? currentColumn-1 : currentColumn;
@@ -215,8 +215,8 @@ function move() {
             gameOver();
         }
     }
-    else if(currentDirection=="up")  {
-        if(!currentRow-2<0) {
+    else if(currentDirection=="up")  {      
+        if(currentRow>=0)   {
             if(currentStep==movingSteps)    {
                 lockDirection=false;
                 currentRow=currentDirection==nextDirection ? currentRow-1 : currentRow;
@@ -274,7 +274,7 @@ function move() {
 function fillBoxFromEdge(row, col, fromEdge, percentage) {
     let miniBox=document.getElementById(getBlockId(row, col));
     if(fromEdge=="right")   {
-        miniBox.style.left=100-percentage+"%";
+        miniBox.style.left=percentage==0 ? "0%" : 100-percentage+"%";
         miniBox.style.width=percentage+"%";
     }
     else if(fromEdge=="left")   {
@@ -286,7 +286,7 @@ function fillBoxFromEdge(row, col, fromEdge, percentage) {
         miniBox.style.height=percentage+"%";
     }
     else if(fromEdge=="bottom") {
-        miniBox.style.top=100-percentage+"%";
+        miniBox.style.top=percentage==0 ? "0%" : 100-percentage+"%";
         miniBox.style.height=percentage+"%";
     }
     miniBox.style.backgroundColor="mediumblue";
@@ -294,19 +294,32 @@ function fillBoxFromEdge(row, col, fromEdge, percentage) {
 
 function gameOver() {
     clearInterval(interval);
+    let lose=document.getElementById("loseScreen");
+    lose.style.display="block";
 }
 
 function restart()  {
-    for(let a=0; a<cols; a++)   {
-        for(let b=0; b<rows; b++)   {
-            clearBox(b, a);
-        }
+    let lose=document.getElementById("loseScreen");
+    lose.style.display="none";
+    for(let a=0; a<snakeArray.length; a++)   {
+        let toClear=snakeArray[a];
+        clearBox(toClear.theRow, toClear.theCol);
+        console.log(snakeArray.length);
     }
+    lockDirection=false;
+    firstMove=true;
+    isBoxFill=false;
+    callTime=1;
     currentRow=10;
     currentColumn=15;
-    fillBox(10, 15);
+    snakeArray=[{theRow: currentRow, theCol: currentColumn}];
+    console.log(snakeArray);
     nextDirection=undefined;
     firstMove=true;
+    currentStep=4;
+    snakeLength=3;
+    currentDirection=undefined;
+    fillBox(currentRow, currentColumn);
 }
 
 function makeApple()    {
@@ -316,6 +329,7 @@ function makeApple()    {
     while(apple.style.backgroundColor=="mediumblue")   {
         row=Math.floor(Math.random()*rows);
         col=Math.floor(Math.random()*cols);
+        apple=document.getElementById(getBlockId(row, col));
     }
     let appleBox=document.getElementById("outbox "+row+","+col);
     appleBox.style.backgroundColor="red";
