@@ -5,6 +5,7 @@ body    {
     -ms-user-select: none;
     user-select: none;
     -moz-user-select: none;
+    touch-action: manipulation;
 }
 
 #side   {
