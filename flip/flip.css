@@ -1,6 +1,10 @@
 body    {
     margin: 0;
     padding: 0;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -moz-user-select: none;
 }
 
 #side   {
@@ -21,7 +25,7 @@ body    {
 }
 
 #theButton  {
-    width: 10%;
+    width: 40%;
     height: 10%;
     bottom: 10%;
     left: 0;
