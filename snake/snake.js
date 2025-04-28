@@ -39,6 +39,8 @@ let callTime=1;
 
 let isBoxFill=false;
 
+let snakeIncrementSize=2;
+
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keydown', (e)=>{
     if(lockDirection==false)    {
@@ -139,6 +141,7 @@ function fillBox(row, col)  {
 }
 
 function move() {
+    console.log(movingInterval);
     if(snakeArray.length>snakeLength)   {
         callTime++;
         let deleted=snakeArray[0];
@@ -273,6 +276,7 @@ function move() {
 
 function fillBoxFromEdge(row, col, fromEdge, percentage) {
     let miniBox=document.getElementById(getBlockId(row, col));
+    miniBox.style.backgroundColor="mediumblue";
     if(fromEdge=="right")   {
         miniBox.style.left=percentage==0 ? "0%" : 100-percentage+"%";
         miniBox.style.width=percentage+"%";
@@ -289,7 +293,11 @@ function fillBoxFromEdge(row, col, fromEdge, percentage) {
         miniBox.style.top=percentage==0 ? "0%" : 100-percentage+"%";
         miniBox.style.height=percentage+"%";
     }
-    miniBox.style.backgroundColor="mediumblue";
+    if(percentage==0)   {
+        miniBox.style.backgroundColor="transparent";
+        miniBox.style.width="100%";
+        miniBox.style.height="100%";
+    }
 }
 
 function gameOver() {
@@ -304,10 +312,10 @@ function restart()  {
     for(let a=0; a<snakeArray.length; a++)   {
         let toClear=snakeArray[a];
         clearBox(toClear.theRow, toClear.theCol);
-        console.log(snakeArray.length);
     }
     lockDirection=false;
     firstMove=true;
+    movingInterval=30;
     isBoxFill=false;
     callTime=1;
     currentRow=10;
@@ -339,8 +347,13 @@ function eat(row, col)  {
     let apple=document.getElementById("outbox "+row+","+col);
     if(apple.style.backgroundColor=="red")  {
         apple.style.backgroundColor="limegreen";
-        snakeLength=snakeLength+2;
+        snakeLength=snakeLength+snakeIncrementSize;
         makeApple();
+        if(movingInterval>=18 && (snakeLength-3)%(snakeIncrementSize*3)==0)    {
+            clearInterval(interval);
+            movingInterval=movingInterval-2;
+            interval=setInterval(move, movingInterval);
+        }
     }
 }
 
@@ -348,7 +361,7 @@ function dieIntoBody() {
     let head=snakeArray[snakeArray.length-1];
     for (let i=0; i<snakeArray.length-1; i++) {
         let body=snakeArray[i];
-        if(body.theRow===head.theRow && body.theCol===head.theCol) {
+        if(body.theRow==head.theRow && body.theCol==head.theCol) {
             gameOver();
             console.log("bleh");
         }
