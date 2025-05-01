@@ -33,4 +33,5 @@ body    {
     right: 0;
     position: absolute;
     margin: auto;
+    touch-action: manipulation;
 }
