@@ -20,7 +20,7 @@ body    {
     -ms-user-select: none;
     user-select: none;
     -moz-user-select: none;
-    touch-action: none;
+    touch-action: manipulation;
 }
 
 .box    {
@@ -79,5 +79,5 @@ body    {
 }
 
 div {
-    touch-action: none;
+    touch-action: manipulation;
 }
