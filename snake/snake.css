@@ -11,7 +11,6 @@
     right: 0;
     position: absolute;
     margin: auto;
-    touch-action: manipulation;
 }
 
 body    {
@@ -22,7 +21,7 @@ body    {
     -ms-user-select: none;
     user-select: none;
     -moz-user-select: none;
-    touch-action: manipulation;
+    touch-action: none;
 }
 
 .box    {
@@ -30,7 +29,6 @@ body    {
     position: absolute;
     border: 1px black solid;
     display: inline-block;
-    touch-action: manipulation;
 }
 
 #loseScreen {
@@ -46,7 +44,6 @@ body    {
     margin: auto;
     z-index: 2;
     border-radius: 4%;
-    touch-action: manipulation;
 }
 
 #theText    {
@@ -73,7 +70,6 @@ body    {
     position: absolute;
     color: black;
     border-radius: 10%;
-    touch-action: manipulation;
 }
 
 .innerBox   {
@@ -81,5 +77,4 @@ body    {
     position: relative;
     display: inline-block;
     z-index: 1;
-    touch-action: manipulation;
 }
