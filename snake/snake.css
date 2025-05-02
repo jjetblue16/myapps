@@ -22,6 +22,7 @@ body    {
     user-select: none;
     -moz-user-select: none;
     touch-action: none;
+    touch-action: manipulation;
 }
 
 .box    {
