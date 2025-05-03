@@ -96,6 +96,7 @@ function getTouches(evt) {
 }                                                     
                                                                          
 function handleTouchStart(evt) {
+    alert("gangnam style");
     const firstTouch = getTouches(evt)[0];                                      
     xDown = firstTouch.clientX;                                      
     yDown = firstTouch.clientY;                                      
