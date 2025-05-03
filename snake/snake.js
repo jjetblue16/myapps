@@ -398,6 +398,10 @@ function gameOver() {
     clearInterval(interval);
     let lose=document.getElementById("loseScreen");
     lose.style.display="block";
+    upBox.style.display="none";
+    downBox.style.display="none";
+    rightBox.style.display="none";
+    leftBox.style.display="none";
 }
 
 function restart()  {
@@ -408,6 +412,11 @@ function restart()  {
         clearBox(toClear.theRow, toClear.theCol);
     }
     lockDirection=false;
+    upBox.style.display="block";
+    downBox.style.display="block";
+    rightBox.style.display="block";
+    leftBox.style.display="block";
+    
     firstMove=true;
     movingInterval=30;
     isBoxFill=false;
