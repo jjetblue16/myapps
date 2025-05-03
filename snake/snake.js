@@ -41,6 +41,11 @@ let isBoxFill=false;
 
 let snakeIncrementSize=2;
 
+let leftBox;
+let rightBox;
+let upBox;
+let downBox;
+
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keydown', (e)=>{
     if(lockDirection==false)    {
@@ -85,76 +90,12 @@ document.addEventListener('keydown', (e)=>{
     }
 })
 
-document.addEventListener('touchstart', handleTouchStart, false);        
-document.addEventListener('touchmove', handleTouchMove, false);
-
-var xDown=null;                                                        
-var yDown=null;
-
-function getTouches(evt) {
-  return evt.touches || evt.originalEvent.touches;
-}                                                     
-                                                                         
-function handleTouchStart(evt) {
-    alert("gangnam style");
-    const firstTouch = getTouches(evt)[0];                                      
-    xDown = firstTouch.clientX;                                      
-    yDown = firstTouch.clientY;                                      
-};                                                
-                                                                         
-function handleTouchMove(evt) {
-    if(!xDown || !yDown) {
-        return;
-    }
-    var xUp=evt.touches[0].clientX;                                    
-    var yUp=evt.touches[0].clientY;
-    var xDiff=xDown-xUp;
-    var yDiff=yDown-yUp;                                                            
-    if(Math.abs(xDiff)>Math.abs(yDiff) ) {
-        if (xDiff>0) {
-            nextDirection=nextDirection!="left" ? "right" : nextDirection;
-            lockDirection=true;
-            if(firstMove) {
-                currentDirection=nextDirection;
-                interval=setInterval(move, movingInterval);
-                firstMove=false;
-            }
-        } else {
-            nextDirection=nextDirection!="right" ? "left" : nextDirection;
-            lockDirection=true;
-            if(firstMove) {
-                currentDirection=nextDirection;
-                interval=setInterval(move, movingInterval);
-                firstMove=false;
-            }
-        }                       
-    }
-    else {
-        if(yDiff>0) {
-            nextDirection=nextDirection!="up" ? "down" : nextDirection;
-            lockDirection=true;
-            if(firstMove) {
-                currentDirection=nextDirection;
-                interval=setInterval(move, movingInterval);
-                firstMove=false;
-            }
-        }
-        else { 
-            nextDirection=nextDirection!="down" ? "up" : nextDirection;
-            lockDirection=true;
-            if(firstMove) {
-                currentDirection=nextDirection;
-                interval=setInterval(move, movingInterval);
-                firstMove=false;
-            }
-        }                                                                 
-    }
-    xDown=null;
-    yDown=null;                                             
-};
-
 function start()    {
     playBox=document.getElementById("playBox");
+    leftBox=document.getElementById("leftBox");
+    rightBox=document.getElementById("rightBox");
+    upBox=document.getElementById("upBox");
+    downBox=document.getElementById("downBox");
     background=document.getElementById("background");
     let size=background.getBoundingClientRect();
     width=size.width;
@@ -169,6 +110,91 @@ function start()    {
     drawGrid();
     fillBox(currentRow, currentColumn);
     makeApple();
+    
+    upBox.addEventListener('mousedown', function () {
+        nextDirection=nextDirection!="down" ? "up" : nextDirection;
+        lockDirection=true;
+        if(firstMove) {
+            currentDirection=nextDirection;
+            interval=setInterval(move, movingInterval);
+            firstMove=false;
+            upBox.style.width="100%";
+            upBox.style.height-"50%";
+            downBox.style.width="100%";
+            downBox.style.height="50%";
+            rightBox.style.width="50%";
+            rightBox.style.height="100%";
+            leftBox.style.width="50%";
+            leftBox.style.height="100%";
+        }
+        upBox.style.display="none";
+        downBox.style.display="none";
+        rightBox.style.display="block";
+        leftBox.style.display="block";
+    });
+    downBox.addEventListener('mousedown', function () {
+        nextDirection=nextDirection!="up" ? "down" : nextDirection;
+        lockDirection=true;
+        if(firstMove) {
+            currentDirection=nextDirection;
+            interval=setInterval(move, movingInterval);
+            firstMove=false;
+            upBox.style.width="100%";
+            upBox.style.height-"50%";
+            downBox.style.width="100%";
+            downBox.style.height="50%";
+            rightBox.style.width="50%";
+            rightBox.style.height="100%";
+            leftBox.style.width="50%";
+            leftBox.style.height="100%";
+        }
+        upBox.style.display="none";
+        downBox.style.display="none";
+        rightBox.style.display="block";
+        leftBox.style.display="block";
+    });
+    leftBox.addEventListener('mousedown', function () {
+        nextDirection=nextDirection!="right" ? "left" : nextDirection;
+        lockDirection=true;
+        if(firstMove) {
+            currentDirection=nextDirection;
+            interval=setInterval(move, movingInterval);
+            firstMove=false;
+            upBox.style.width="100%";
+            upBox.style.height-"50%";
+            downBox.style.width="100%";
+            downBox.style.height="50%";
+            rightBox.style.width="50%";
+            rightBox.style.height="100%";
+            leftBox.style.width="50%";
+            leftBox.style.height="100%";
+        }
+        upBox.style.display="block";
+        downBox.style.display="block";
+        rightBox.style.display="none";
+        leftBox.style.display="none";
+    });
+    rightBox.addEventListener('mousedown', function () {
+        nextDirection=nextDirection!="left" ? "right" : nextDirection;
+        lockDirection=true;
+        if(firstMove) {
+            currentDirection=nextDirection;
+            interval=setInterval(move, movingInterval);
+            firstMove=false;
+            upBox.style.width="100%";
+            upBox.style.height-"50%";
+            downBox.style.width="100%";
+            downBox.style.height="50%";
+            rightBox.style.width="50%";
+            rightBox.style.height="100%";
+            leftBox.style.width="50%";
+            leftBox.style.height="100%";
+        }
+        upBox.style.display="block";
+        downBox.style.display="block";
+        rightBox.style.display="none";
+        leftBox.style.display="none";
+    });
 }
 
 function drawGrid() {
