@@ -26,6 +26,7 @@ body    {
 }
 
 #theButton  {
+    background-color: lightblue;
     width: 40%;
     height: 10%;
     bottom: 10%;
@@ -34,4 +35,5 @@ body    {
     position: absolute;
     margin: auto;
     touch-action: manipulation;
+    font-size: 150%;
 }
