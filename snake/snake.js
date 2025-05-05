@@ -26,12 +26,12 @@ let nextDirection;
 
 let firstMove=true;
 
-let currentRow=10;
-let currentColumn=15;
+let currentRow;
+let currentColumn;
 
 let interval;
 
-let snakeArray=[{theRow: 10, theCol: 15}];
+let snakeArray;
 
 let lockDirection=false;
 
@@ -107,6 +107,9 @@ function start()    {
     console.log(playBoxWidth+","+playBoxHeight)
     cols=playBoxWidth/snakeBoxSize;
     rows=playBoxHeight/snakeBoxSize;
+    currentRow=Math.floor(rows/2);
+    currentColumn=Math.floor(cols/2);
+    snakeArray=[{theRow: currentRow, theCol: currentColumn}]
     drawGrid();
     fillBox(currentRow, currentColumn);
     makeApple();
@@ -416,13 +419,13 @@ function restart()  {
     downBox.style.display="block";
     rightBox.style.display="block";
     leftBox.style.display="block";
-    
+
     firstMove=true;
     movingInterval=30;
     isBoxFill=false;
     callTime=1;
-    currentRow=10;
-    currentColumn=15;
+    currentRow=Math.floor(rows/2);
+    currentColumn=Math.floor(cols/2);
     snakeArray=[{theRow: currentRow, theCol: currentColumn}];
     console.log(snakeArray);
     nextDirection=undefined;
