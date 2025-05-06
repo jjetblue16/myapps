@@ -14,7 +14,7 @@ function start()    {
     side=document.getElementById("side");
     button=document.getElementById("theButton");
     coinSound=new Audio("coin-sound.mp3");
-    coinSound.load();
+    coinSound.preload = 'auto';
     coinSound.addEventListener('playing', (event) => {
         let randomSide=Math.floor(Math.random()*2);
         isHeads=randomSide==0;
