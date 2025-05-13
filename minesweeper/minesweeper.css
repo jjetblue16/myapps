@@ -28,6 +28,8 @@ body    {
     border: 3px black solid;
     box-sizing: border-box;
     border-style: outset;
+    text-align: center;
+    vertical-align: middle;
 }
 
 img {
