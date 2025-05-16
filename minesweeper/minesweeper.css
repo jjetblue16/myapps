@@ -40,3 +40,60 @@ img {
     position: absolute;
     margin: auto;
 }
+
+#lose   {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+    width: 40%;
+    height: 30%;
+    background-color: white;
+    border: 1px black solid;
+    display: none;
+    font-size: 200%;
+    text-align: center;
+}
+
+#theButton  {
+    left: 0;
+    right: 0;
+    bottom: 10%;
+    margin: auto;
+    position: absolute;
+    background-color: lightgreen;
+    width: 70%;
+    height: 20%;
+}
+
+#toolbar    {
+    position: relative;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    height: 50px;
+    background-color: gray;
+}
+
+#shovel {
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-color: rgb(177, 177, 177);
+    height: 100%;
+    width: 50%;
+}
+
+#flag   {
+    top: 0;
+    right: 0;
+    position: absolute;
+    background-color: gray;
+    height: 100%;
+    width: 50%;
+}

@@ -3,10 +3,19 @@
         <link rel="stylesheet" href="minesweeper.css">
         <script type="text/javascript" src="minesweeper.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Minesweeper</title>
     </head>
     <body>
         <div id="background">
+            <div id="toolbar">
+                <button id="shovel" onclick="switchTool('shovel')"><img id="shovelImg" src="shovel.png"></button>
+                <button id="flag" onclick="switchTool('flag')"><img id="flagImg" src="flag.png"></button>
+            </div>
             <div id="gameBox"></div>
+            <div id="lose">
+                You Lost
+                <button onclick="restart()" id="theButton">Continue</button>
+            </div>
         </div>
     </body>
 </html>
