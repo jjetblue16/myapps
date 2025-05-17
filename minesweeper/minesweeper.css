@@ -55,6 +55,7 @@ img {
     display: none;
     font-size: 200%;
     text-align: center;
+    z-index: 3;
 }
 
 #theButton  {
@@ -87,6 +88,8 @@ img {
     background-color: rgb(177, 177, 177);
     height: 100%;
     width: 50%;
+    box-sizing: border-box;
+    border: 5px black solid;
 }
 
 #flag   {
