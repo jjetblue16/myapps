@@ -26,6 +26,8 @@ let lose;
 let flagButton;
 let shovelButton;
 
+let firstMove=true;
+
 document.addEventListener('DOMContentLoaded', start);
 
 function start()    {
@@ -52,6 +54,15 @@ function start()    {
             let col=block.id;
             row=Number(row.charAt(6));
             col=Number(col.charAt(8));
+            if(firstMove)   {
+                while(hasBomb(row, col) || getNumberOfBombs(row, col)!=0)   {
+                    bombArray.splice(0, bombArray.length);
+                    for(let d=0; d<mines; d++)  {
+                        addBomb();
+                    }
+                }
+                firstMove=false;
+            }
             console.log(row+","+col);
             if(mode=="shovel")  {
                 open(row, col);
@@ -77,6 +88,7 @@ function makeGrid() {
 }
 
 function addBomb()  {
+    console.log('bomb added');
     let randomRow=Math.floor(Math.random()*rows);
     let randomCol=Math.floor(Math.random()*cols);
     bombArray.push({theRow: randomRow, theCol: randomCol});
@@ -156,6 +168,7 @@ function restart()  {
     for(let g=0; g<mines; g++)  {
         addBomb(g);
     }
+    firstMove=true;
 }
 
 function switchTool(tool)   {
