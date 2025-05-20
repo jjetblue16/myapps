@@ -21,12 +21,14 @@ const bombArray=new Array();
 
 let alive=true;
 
-let lose;
+let popup;
 
 let flagButton;
 let shovelButton;
 
 let firstMove=true;
+
+let toOpen;
 
 document.addEventListener('DOMContentLoaded', start);
 
@@ -35,7 +37,7 @@ function start()    {
     flagButton=document.getElementById("flag");
     background=document.getElementById("background");
     gameBox=document.getElementById("gameBox");
-    lose=document.getElementById("lose");
+    popup=document.getElementById("popup");
     let sizeInfo=background.getBoundingClientRect();
     width=sizeInfo.width;
     height=sizeInfo.height;
@@ -43,6 +45,7 @@ function start()    {
     gameBox.style.height=gameHeight+"px";
     rows=gameHeight/boxSize;
     cols=gameWidth/boxSize;
+    toOpen=rows*cols-mines;
     makeGrid();
     for(let d=0; d<mines; d++)  {
         addBomb();
@@ -66,12 +69,22 @@ function start()    {
             console.log(row+","+col);
             if(mode=="shovel")  {
                 open(row, col);
+                if(toOpen==0)   {
+                    gameOver();
+                }
             }
             else    {
                 flagSpace(row, col);
             }
         }
     });
+}
+
+function isPhone() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  const isMobile = /mobi|android|iphone|ipod|blackberry|iemobile|opera mini/.test(userAgent);
+  const isTablet = /(ipad|tablet|(android(?!.*mobi))|nexus(7|9))/i.test(userAgent);
+  return isMobile && !isTablet;
 }
 
 function makeGrid() {
@@ -91,6 +104,12 @@ function addBomb()  {
     console.log('bomb added');
     let randomRow=Math.floor(Math.random()*rows);
     let randomCol=Math.floor(Math.random()*cols);
+    for(let m=0; m<bombArray.length; m++)   {
+        while(randomRow==bombArray[m].theRow && randomCol==bombArray[m].theCol) {
+            randomRow=Math.floor(Math.random()*rows);
+            randomCol=Math.floor(Math.random()*cols);
+        }
+    }
     bombArray.push({theRow: randomRow, theCol: randomCol});
 }
  
@@ -110,6 +129,7 @@ function open(row, col) {
                     }
                 }
                 if(alive)   {
+                    toOpen--;
                     let bomb=getNumberOfBombs(row, col);
                     if(bomb!=0)    {
                         block.textContent=bomb;
@@ -153,7 +173,14 @@ function close()    {
 }
 
 function gameOver() {
-    lose.style.display="block";
+    popup.style.display="block";
+    let theText=document.getElementById("theText");
+    if(!alive)   {
+        theText.textContent="You Lost";
+    }
+    else    {
+        theText.textContent="You Win";
+    }
 }
 
 function restart()  {
@@ -161,7 +188,8 @@ function restart()  {
     bombArray.splice(0, bombArray.length);
     close();
     alive=true;
-    lose.style.display="none";
+    toOpen=rows*cols-mines;
+    popup.style.display="none";
     flagButton.style.backgroundColor="gray";
     shovelButton.style.backgroundColor="rgb(177, 177, 177)";
     shovelButton.style.border="5px black solid";
