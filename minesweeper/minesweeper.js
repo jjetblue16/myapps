@@ -67,14 +67,16 @@ function start()    {
                 firstMove=false;
             }
             console.log(row+","+col);
-            if(mode=="shovel")  {
-                open(row, col);
-                if(toOpen==0)   {
-                    gameOver();
+            if(alive)    {
+                if(mode=="shovel")  {
+                    open(row, col);
+                    if(toOpen==0)   {
+                        gameOver();
+                    }
                 }
-            }
-            else    {
-                flagSpace(row, col);
+                else    {
+                    flagSpace(row, col);
+                }
             }
         }
     });
@@ -173,6 +175,7 @@ function close()    {
 }
 
 function gameOver() {
+    alive=false;
     popup.style.display="block";
     let theText=document.getElementById("theText");
     if(!alive)   {
@@ -191,6 +194,7 @@ function restart()  {
     toOpen=rows*cols-mines;
     popup.style.display="none";
     flagButton.style.backgroundColor="gray";
+    flagButton.style.border="none";
     shovelButton.style.backgroundColor="rgb(177, 177, 177)";
     shovelButton.style.border="5px black solid";
     for(let g=0; g<mines; g++)  {
