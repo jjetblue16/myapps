@@ -10,8 +10,8 @@ let boxSize=50;
 let rows;
 let cols;
 
-let gameWidth=450;
-let gameHeight=450;
+let gameWidth=boxSize*9;
+let gameHeight=boxSize*9;
 
 let mines=13;
 
