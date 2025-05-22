@@ -175,7 +175,6 @@ function close()    {
 }
 
 function gameOver() {
-    alive=false;
     popup.style.display="block";
     let theText=document.getElementById("theText");
     if(!alive)   {
@@ -184,6 +183,7 @@ function gameOver() {
     else    {
         theText.textContent="You Win";
     }
+    alive=false;
 }
 
 function restart()  {
