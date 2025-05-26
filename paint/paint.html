@@ -9,5 +9,20 @@
         <div id="background">
             <canvas id="myCanvas"></canvas>
         </div>
+        <div id="tools">
+            <div id="slidecontainer">
+                <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+            </div>
+            <div id="palette">
+                <button class="color" id="black" onclick="changeColor('black')"></button>
+                <button class="color" id="red" onclick="changeColor('red')"></button>
+                <button class="color" id="orange" onclick="changeColor('orange')"></button>
+                <button class="color" id="yellow" onclick="changeColor('yellow')"></button>
+                <button class="color" id="green" onclick="changeColor('green')"></button>
+                <button class="color" id="blue" onclick="changeColor('blue')"></button>
+                <button class="color" id="purple" onclick="changeColor('purple')"></button>
+                <button class="color" id="brown" onclick="changeColor('brown')"></button>
+            </div>
+        </div>
     </body>
 </html>
