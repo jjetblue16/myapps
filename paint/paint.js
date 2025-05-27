@@ -24,10 +24,24 @@ let sliderValue=50;
 
 let slider;
 
+let tool="paint";
+
+let followCircle;
+
+let paintbrush;
+let eraser;
+
 document.addEventListener('DOMContentLoaded', start);
 
 function start()    {
+    paintbrush=document.getElementById("paintbrush");
+    eraser=document.getElementById("eraser");
+    paintbrush.style.border="5px black solid";
+    eraser.style.border="none";
     background=document.getElementById("background");
+    followCircle=document.getElementById("follow");
+    followCircle.style.width=sliderValue/8+"px";
+    followCircle.style.height=sliderValue/8+"px";
     let backgroundInfo=background.getBoundingClientRect();
     width=backgroundInfo.width;
     height=backgroundInfo.height;
@@ -49,7 +63,10 @@ function start()    {
         const x=e.clientX;
         const y=e.clientY;
         ctx.strokeStyle=currentColor;
-        ctx.lineWidth=sliderValue/10;
+        if(tool=="erase")  {
+            ctx.strokeStyle="white";
+        }
+        ctx.lineWidth=sliderValue/7;
         ctx.beginPath();
         ctx.moveTo(x, y);
         console.log('d');
@@ -62,6 +79,13 @@ function start()    {
             ctx.stroke();
             console.log('m');
         }
+        const x = e.clientX;
+        const y = e.clientY;
+        let circleInfo=followCircle.getBoundingClientRect();
+        let circleWidth=circleInfo.width;
+        let circleHeight=circleInfo.height;
+        followCircle.style.left=x-circleWidth/2;
+        followCircle.style.top=y-circleHeight/2;
     });
     theCanvas.addEventListener('mouseup', function(e)   {
         console.log('u');
@@ -73,9 +97,23 @@ function start()    {
     });
     slider.addEventListener('input', function() {
         sliderValue = slider.value;
+        followCircle.style.width=sliderValue/8+"px";
+        followCircle.style.height=sliderValue/8+"px";
     });
 }
 
 function changeColor(color) {
     currentColor=color;
+}
+
+function switchTool(theTool)   {
+    tool=theTool;
+    if(theTool=="paint")    {
+        paintbrush.style.border="5px black solid";
+        eraser.style.border="none";
+    }
+    else if(theTool=="erase")   {
+        eraser.style.border="5px black solid";
+        paintbrush.style.border="none";
+    }
 }

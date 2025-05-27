@@ -6,6 +6,7 @@ body    {
     -ms-user-select: none;
     user-select: none;
     -moz-user-select: none;
+    overflow: hidden;
 }
 
 #background {
@@ -20,6 +21,7 @@ body    {
     right: 0;
     top: 0;
     position: absolute;
+    z-index: 1;
 }
 
 #tools  {
@@ -30,11 +32,10 @@ body    {
     position: absolute;
     background-color: gray;
     z-index: 1;
+    z-index: 2;
 }
 
 #palette    {
-    display: flex;
-    flex-wrap: wrap;
     width: 100%;
     left: 0;
     bottom: 0;
@@ -42,11 +43,34 @@ body    {
     position: absolute;
     background-color: gray;
     align-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 2;
+}
+
+.tool {
+    width: 50%;
+    height: 15%;
+    position: absolute;
+    background-color: gray;
+    color: white;
+    z-index: 2;
+}
+
+#paintbrush {
+    top: 0;
+    left: 0;
+}
+
+#eraser {
+    top: 0;
+    right: 0;
 }
 
 .color  {
     width: 50%;
     position: relative;
+    z-index: 2;
 }
 
 #black    {
@@ -89,6 +113,7 @@ body    {
     right: 0;
     margin: auto;
     position: absolute;
+    z-index: 2;
 }
 
 .slider {
@@ -98,4 +123,27 @@ body    {
     right: 0;
     margin: auto;
     position: absolute;
+    z-index: 2;
+}
+
+#follow {
+    z-index: 3;
+    border: 2px black solid;
+    border-radius: 50%;
+    background-color: transparent;
+    position: absolute;
+    margin: auto;
+    pointer-events: none;
+}
+
+img {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+button  {
+    margin: 0;
+    padding: 0;
 }
