@@ -114,7 +114,7 @@ function addBomb()  {
     }
     bombArray.push({theRow: randomRow, theCol: randomCol});
 }
- 
+
 function open(row, col) {
     if((row>=0 && row<rows) && (col>=0 && col<cols))  {
         let block=document.getElementById(getBlockId(row, col));
