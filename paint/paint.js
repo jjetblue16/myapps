@@ -58,6 +58,15 @@ function start()    {
     ctx=theCanvas.getContext('2d');
     theCanvas.width=width+"";
     theCanvas.height=height+"";
+    window.addEventListener('resize', function() {
+        backgroundInfo=background.getBoundingClientRect();
+        width=backgroundInfo.width;
+        height=backgroundInfo.height;
+        let imgD=ctx.getImageData(0, 0, theCanvas.width-1, theCanvas.height-1);
+        theCanvas.width=width+"";
+        theCanvas.height=height+"";
+        ctx.putImageData(imgD, 0, 0);
+    });
     theCanvas.addEventListener('mousedown', function(e) {
         isMouseDown=true;
         const x=e.clientX;
@@ -79,13 +88,6 @@ function start()    {
             ctx.stroke();
             console.log('m');
         }
-        const x = e.clientX;
-        const y = e.clientY;
-        let circleInfo=followCircle.getBoundingClientRect();
-        let circleWidth=circleInfo.width;
-        let circleHeight=circleInfo.height;
-        followCircle.style.left=x-circleWidth/2;
-        followCircle.style.top=y-circleHeight/2;
     });
     theCanvas.addEventListener('mouseup', function(e)   {
         console.log('u');
@@ -99,6 +101,22 @@ function start()    {
         sliderValue = slider.value;
         followCircle.style.width=sliderValue/8+"px";
         followCircle.style.height=sliderValue/8+"px";
+    });
+    window.addEventListener('mousemove', function(e)   {
+        const x = e.clientX;
+        const y = e.clientY;
+        let circleInfo=followCircle.getBoundingClientRect();
+        let circleWidth=circleInfo.width;
+        let circleHeight=circleInfo.height;
+        followCircle.style.left=x-circleWidth/2;
+        followCircle.style.top=y-circleHeight/2;
+    });
+    document.documentElement.addEventListener('mouseenter', () => {
+        followCircle.style.display="block";
+    });
+
+    document.documentElement.addEventListener('mouseleave', () => {
+        followCircle.style.display="none";
     });
 }
 
@@ -116,4 +134,8 @@ function switchTool(theTool)   {
         eraser.style.border="5px black solid";
         paintbrush.style.border="none";
     }
+}
+
+function clearAll()    {
+    ctx.clearRect(0, 0, theCanvas.width, theCanvas.height);
 }

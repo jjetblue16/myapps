@@ -51,20 +51,10 @@ body    {
 .tool {
     width: 50%;
     height: 15%;
-    position: absolute;
-    background-color: gray;
+    position: relative;
+    background-color: white;
     color: white;
     z-index: 2;
-}
-
-#paintbrush {
-    top: 0;
-    left: 0;
-}
-
-#eraser {
-    top: 0;
-    right: 0;
 }
 
 .color  {
@@ -134,13 +124,15 @@ body    {
     position: absolute;
     margin: auto;
     pointer-events: none;
+    display: none;
 }
 
 img {
     top: 0;
     left: 0;
-    width: 100%;
+    width: 75%;
     height: 100%;
+    pointer-events: none;
 }
 
 button  {
