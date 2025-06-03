@@ -38,12 +38,18 @@ let rectangleTopLeftY;
 let rectWidth;
 let rectHeight;
 
+let circleButton;
+
+let isDrawing = false;
+let startX, startY;
+
 let layeredCanvas;
 let layeredCtx;
 
 document.addEventListener('DOMContentLoaded', start);
 
 function start()    {
+    circleButton=document.getElementById("drawCircle");
     layeredCanvas=document.getElementById("layeredCanvas");
     layeredCtx=layeredCanvas.getContext('2d');
     rectangleButton=document.getElementById("drawRectangle");
@@ -80,12 +86,10 @@ function start()    {
         backgroundInfo=background.getBoundingClientRect();
         width=backgroundInfo.width;
         height=backgroundInfo.height;
-        let imgD=ctx.getImageData(0, 0, theCanvas.width-1, theCanvas.height-1);
         theCanvas.width=width+"";
         theCanvas.height=height+"";
         layeredCanvas.width=width+"";
         layeredCanvas.height=height+"";
-        ctx.putImageData(imgD, 0, 0);
     });
     theCanvas.addEventListener('mousedown', function(e) {
         isMouseDown=true;
@@ -127,43 +131,68 @@ function start()    {
         isMouseDown=true;
         const x=e.clientX;
         const y=e.clientY;
-        rectangleTopLeftX=x;
-        rectangleTopLeftY=y;
+        if(tool=="drawRect") {
+            rectangleTopLeftX=x;
+            rectangleTopLeftY=y;
+        }
+        else if(tool=="drawCircle") {
+            isDrawing = true;
+            startX=x-theCanvas.getBoundingClientRect().left;
+            startY=y-theCanvas.getBoundingClientRect().top;
+        }
     });
     layeredCanvas.addEventListener('mousemove', function(e)    {
         layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
         const x=e.clientX;
         const y=e.clientY;
-        rectWidth=x-rectangleTopLeftX;
-        rectHeight=y-rectangleTopLeftY;
-        layeredCtx.fillStyle=currentColor;
-        layeredCtx.strokeStyle="black";
-        if(isMouseDown) {
-            document.addEventListener('keydown', function(e) {
-                if (e.shiftKey) {
-                    if(rectHeight>rectWidth)    {
-                        rectHeight=rectWidth;
-                    }
-                    else if(rectWidth>rectHeight)   {
-                        rectWidth=rectHeight
-                    }
-                    layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
-                    layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
-                }
-            });
-            layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+        if(tool=="drawRect") {
+            rectWidth=x-rectangleTopLeftX;
+            rectHeight=y-rectangleTopLeftY;
+            layeredCtx.fillStyle=currentColor;
             layeredCtx.strokeStyle="black";
+            if(isMouseDown) {
+                document.addEventListener('keydown', function(e) {
+                    if (e.shiftKey) {
+                        if(rectHeight>rectWidth)    {
+                            rectHeight=rectWidth;
+                        }
+                        else if(rectWidth>rectHeight)   {
+                            rectWidth=rectHeight
+                        }
+                        layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
+                        layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+                    }
+                });
+                layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+                layeredCtx.strokeStyle="black";
+            }
+        }
+        else if(tool=="drawCircle") {
+            if(!isDrawing) return;
+            layeredCtx.clearRect(0, 0, theCanvas.width, theCanvas.height);
+            const currentX=e.clientX-theCanvas.getBoundingClientRect().left;
+            const currentY=e.clientY-theCanvas.getBoundingClientRect().top;
+            drawEllipse(startX, startY, currentX, currentY, true);
         }
     });
     layeredCanvas.addEventListener('mouseup', function(e)    {
-        isMouseDown=false;
-        const x=e.clientX;
-        const y=e.clientY;
-        ctx.fillStyle=currentColor;
-        ctx.fillRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+        if(tool=="drawRect")    {
+            isMouseDown=false;
+            const x=e.clientX;
+            const y=e.clientY;
+            ctx.fillStyle=currentColor;
+            ctx.fillRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+        }
+        else if(tool=="drawCircle") {
+            isDrawing=false;
+            layeredCtx.clearRect(0, 0, theCanvas.width, theCanvas.height);
+            const currentX=e.clientX-theCanvas.getBoundingClientRect().left;
+            const currentY=e.clientY-theCanvas.getBoundingClientRect().top;
+            drawEllipse(startX, startY, currentX, currentY, false);
+        }
     });
     slider.addEventListener('input', function() {
-        sliderValue = slider.value;
+        sliderValue=slider.value;
         followCircle.style.width=sliderValue/8+"px";
         followCircle.style.height=sliderValue/8+"px";
     });
@@ -185,6 +214,26 @@ function start()    {
     });
 }
 
+function drawEllipse(x1, y1, x2, y2, onLayered) {
+    const centerX=(x1+x2)/2;
+    const centerY=(y1+y2)/2;
+    const radiusX=Math.abs(x2-x1)/2;
+    const radiusY=Math.abs(y2-y1)/2;
+    if(onLayered) {
+        layeredCtx.beginPath();
+        layeredCtx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2*Math.PI);
+        layeredCtx.stroke();
+    }
+    else    {
+        ctx.beginPath();
+        ctx.fillStyle=currentColor;
+        ctx.strokeStyle=currentColor;
+        ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2*Math.PI);
+        ctx.fill();
+        ctx.stroke();
+    }
+}
+
 function changeColor(color) {
     currentColor=color;
 }
@@ -195,18 +244,28 @@ function switchTool(theTool)   {
         paintbrush.style.border="5px black solid";
         eraser.style.border="none";
         rectangleButton.style.border="none";
+        circleButton.style.border="none";
         layeredCanvas.style.display="none";
     }
     else if(theTool=="erase")   {
         eraser.style.border="5px black solid";
         paintbrush.style.border="none";
         rectangleButton.style.border="none";
+        circleButton.style.border="none";
         layeredCanvas.style.display="none";
     }
     else if(theTool=="drawRect")    {
         rectangleButton.style.border="5px black solid";
         paintbrush.style.border="none";
         eraser.style.border="none";
+        circleButton.style.border="none";
+        layeredCanvas.style.display="block";
+    }
+    else if(theTool=="drawCircle")  {
+        circleButton.style.border="5px black solid";
+        paintbrush.style.border="none";
+        eraser.style.border="none";
+        rectangleButton.style.border="none";
         layeredCanvas.style.display="block";
     }
 }
