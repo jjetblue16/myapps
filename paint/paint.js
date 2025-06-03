@@ -31,13 +31,27 @@ let followCircle;
 let paintbrush;
 let eraser;
 
+let rectangleButton;
+
+let rectangleTopLeftX;
+let rectangleTopLeftY;
+let rectWidth;
+let rectHeight;
+
+let layeredCanvas;
+let layeredCtx;
+
 document.addEventListener('DOMContentLoaded', start);
 
 function start()    {
+    layeredCanvas=document.getElementById("layeredCanvas");
+    layeredCtx=layeredCanvas.getContext('2d');
+    rectangleButton=document.getElementById("drawRectangle");
     paintbrush=document.getElementById("paintbrush");
     eraser=document.getElementById("eraser");
-    paintbrush.style.border="5px black solid";
     eraser.style.border="none";
+    rectangleButton.style.border="none";
+    paintbrush.style.border="5px black solid";
     background=document.getElementById("background");
     followCircle=document.getElementById("follow");
     followCircle.style.width=sliderValue/8+"px";
@@ -45,6 +59,10 @@ function start()    {
     let backgroundInfo=background.getBoundingClientRect();
     width=backgroundInfo.width;
     height=backgroundInfo.height;
+    layeredCanvas.width=width+"";
+    layeredCanvas.height=height+"";
+    layeredCanvas.style.top="0";
+    layeredCanvas.style.left="0";
     slidecontainer=document.getElementById("slidecontainer");
     paletteOpen=document.getElementById("openPalette");
     tools=document.getElementById("tools");
@@ -65,6 +83,8 @@ function start()    {
         let imgD=ctx.getImageData(0, 0, theCanvas.width-1, theCanvas.height-1);
         theCanvas.width=width+"";
         theCanvas.height=height+"";
+        layeredCanvas.width=width+"";
+        layeredCanvas.height=height+"";
         ctx.putImageData(imgD, 0, 0);
     });
     theCanvas.addEventListener('mousedown', function(e) {
@@ -76,16 +96,20 @@ function start()    {
             ctx.strokeStyle="white";
         }
         ctx.lineWidth=sliderValue/7;
-        ctx.beginPath();
-        ctx.moveTo(x, y);
         console.log('d');
+        if(tool=="paint" || tool=="erase")  {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
     });
     theCanvas.addEventListener('mousemove', function(e) {
         if(isMouseDown) {
             const x=e.clientX;
             const y=e.clientY;
-            ctx.lineTo(x, y);
-            ctx.stroke();
+            if(tool=="paint" || tool=="erase")  {
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
             console.log('m');
         }
     });
@@ -94,8 +118,49 @@ function start()    {
         isMouseDown=false;
         const x=e.clientX;
         const y=e.clientY;
-        ctx.lineTo(x, y);
-        ctx.stroke();
+        if(tool=="paint" || tool=="erase")  {
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+    });
+    layeredCanvas.addEventListener('mousedown', function(e)    {
+        isMouseDown=true;
+        const x=e.clientX;
+        const y=e.clientY;
+        rectangleTopLeftX=x;
+        rectangleTopLeftY=y;
+    });
+    layeredCanvas.addEventListener('mousemove', function(e)    {
+        layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
+        const x=e.clientX;
+        const y=e.clientY;
+        rectWidth=x-rectangleTopLeftX;
+        rectHeight=y-rectangleTopLeftY;
+        layeredCtx.fillStyle=currentColor;
+        layeredCtx.strokeStyle="black";
+        if(isMouseDown) {
+            document.addEventListener('keydown', function(e) {
+                if (e.shiftKey) {
+                    if(rectHeight>rectWidth)    {
+                        rectHeight=rectWidth;
+                    }
+                    else if(rectWidth>rectHeight)   {
+                        rectWidth=rectHeight
+                    }
+                    layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
+                    layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+                }
+            });
+            layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+            layeredCtx.strokeStyle="black";
+        }
+    });
+    layeredCanvas.addEventListener('mouseup', function(e)    {
+        isMouseDown=false;
+        const x=e.clientX;
+        const y=e.clientY;
+        ctx.fillStyle=currentColor;
+        ctx.fillRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
     });
     slider.addEventListener('input', function() {
         sliderValue = slider.value;
@@ -129,10 +194,20 @@ function switchTool(theTool)   {
     if(theTool=="paint")    {
         paintbrush.style.border="5px black solid";
         eraser.style.border="none";
+        rectangleButton.style.border="none";
+        layeredCanvas.style.display="none";
     }
     else if(theTool=="erase")   {
         eraser.style.border="5px black solid";
         paintbrush.style.border="none";
+        rectangleButton.style.border="none";
+        layeredCanvas.style.display="none";
+    }
+    else if(theTool=="drawRect")    {
+        rectangleButton.style.border="5px black solid";
+        paintbrush.style.border="none";
+        eraser.style.border="none";
+        layeredCanvas.style.display="block";
     }
 }
 
