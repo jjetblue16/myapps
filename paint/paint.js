@@ -40,6 +40,8 @@ let rectHeight;
 
 let circleButton;
 
+let fillButton;
+
 let isDrawing = false;
 let startX, startY;
 
@@ -49,6 +51,7 @@ let layeredCtx;
 document.addEventListener('DOMContentLoaded', start);
 
 function start()    {
+    fillButton=document.getElementById("fill");
     circleButton=document.getElementById("drawCircle");
     layeredCanvas=document.getElementById("layeredCanvas");
     layeredCtx=layeredCanvas.getContext('2d');
@@ -104,6 +107,9 @@ function start()    {
         if(tool=="paint" || tool=="erase")  {
             ctx.beginPath();
             ctx.moveTo(x, y);
+        }
+        else if(tool=="filler") {
+            floodFill(x, y);
         }
     });
     theCanvas.addEventListener('mousemove', function(e) {
@@ -246,6 +252,7 @@ function switchTool(theTool)   {
         rectangleButton.style.border="none";
         circleButton.style.border="none";
         layeredCanvas.style.display="none";
+        fillButton.style.border="none";
     }
     else if(theTool=="erase")   {
         eraser.style.border="5px black solid";
@@ -253,6 +260,7 @@ function switchTool(theTool)   {
         rectangleButton.style.border="none";
         circleButton.style.border="none";
         layeredCanvas.style.display="none";
+        fillButton.style.border="none";
     }
     else if(theTool=="drawRect")    {
         rectangleButton.style.border="5px black solid";
@@ -260,16 +268,53 @@ function switchTool(theTool)   {
         eraser.style.border="none";
         circleButton.style.border="none";
         layeredCanvas.style.display="block";
+        fillButton.style.border="none";
     }
     else if(theTool=="drawCircle")  {
         circleButton.style.border="5px black solid";
         paintbrush.style.border="none";
         eraser.style.border="none";
         rectangleButton.style.border="none";
+        fillButton.style.border="none";
         layeredCanvas.style.display="block";
+    }
+    else if(theTool=="filler")  {
+        fillButton.style.border="5px black solid";
+        paintbrush.style.border="none";
+        eraser.style.border="none";
+        rectangleButton.style.border="none";
+        circleButton.style.border="none";
+        layeredCanvas.style.display="none";
     }
 }
 
 function clearAll()    {
     ctx.clearRect(0, 0, theCanvas.width, theCanvas.height);
+}
+
+function floodFill(x, y) {
+    if(x>=0 && x<=theCanvas.width && y>=0 && y<=theCanvas.height)   {
+        const pixelData = ctx.getImageData(x, y, 1, 1).data;
+        const red = pixelData[0];
+        const green = pixelData[1];
+        const blue = pixelData[2];
+        const alpha = pixelData[3] / 255;
+        ctx.fillStyle=currentColor;
+        if(red==0 && blue==0 && green==0 && alpha==0)   {
+            ctx.fillRect(x, y, 1, 1);
+            floodSurrounding(x, y);
+        }
+    }
+}
+
+function floodSurrounding(x, y)    {
+    console.log("x="+x+", y="+y);
+    floodFill(x-1, y-1);
+    floodFill(x, y-1); 
+    floodFill(x+1, y-1); 
+    floodFill(x-1, y); 
+    floodFill(x+1, y); 
+    floodFill(x-1, y+1); 
+    floodFill(x, y+1); 
+    floodFill(x+1, y+1);
 }
