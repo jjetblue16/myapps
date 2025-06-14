@@ -1,9 +1,9 @@
 #include <Bluepad32.h>
 #include <ESP32Servo.h>
 
-static const int servoPin = 13;
+static const int servoPin = 15;
 
-static const int servo2Pin=12;
+static const int servo2Pin = 33;
 
 Servo servo1;
 
@@ -96,8 +96,8 @@ void gamePadJoystick(ControllerPtr ctl) {
 
 int translateJoystick(int value) {
   float percent=value/512.0*100.0;
-  Serial.print("percent: ");
-  Serial.println(percent);
+//   Serial.print("percent: ");
+//   Serial.println(percent);
   return percent;
 }
 
@@ -209,7 +209,7 @@ void processGamepad(ControllerPtr ctl) {
 
     // Another way to query controller data is by getting the buttons() function.
     // See how the different "dump*" functions dump the Controller info.
-    dumpGamepad(ctl);
+    //dumpGamepad(ctl);
 }
 
 void processMouse(ControllerPtr ctl) {
@@ -285,13 +285,15 @@ void steering(int percent) {
   // Serial.println(percent);
   float degree=90+(45.0/100.0)*percent*-1;
   servo1.write(degree);
+  Serial.print("steering: ");
+  Serial.println((int)degree);
 }
 
 void acceleration(int percent)  {
   float degree=90+(90.0/100.0)*percent;
   servo2.write(degree);
-  // Serial.print("degree: ");
-  // Serial.println(degree);
+  Serial.print("acceleration: ");
+  Serial.println((int)degree);
 }
 
 // Arduino setup function. Runs in CPU 1
@@ -320,13 +322,8 @@ void setup() {
     servo1.attach(servoPin);
     servo2.attach(servo2Pin);
     Serial.println("stqrt");
-    steering(0);
-    acceleration(100);
-    delay(5000);
-    acceleration(-100);
-    delay(5000);
     acceleration(0);
-    delay(5000);
+    steering(0);
 }
 
 // Arduino loop function. Runs in CPU 1.
@@ -344,5 +341,19 @@ void loop() {
     // https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
 
     //     vTaskDelay(1);
-    delay(100);
+    // currentState = digitalRead(BUTTON_PIN);
+    // if (lastState == HIGH && currentState == LOW)   {
+    //     buttonCalls++;
+    //     if(buttonCalls==1)   {
+    //         acceleration(100);
+    //     }
+    //     else if(buttonCalls==2) {
+    //         acceleration(-100);
+    //     }
+    //     else if(buttonCalls>=3) {
+    //         acceleration(0);
+    //     }
+    // }
+    // lastState = currentState;
+    delay(50);
 }
