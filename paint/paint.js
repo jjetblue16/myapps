@@ -48,6 +48,8 @@ let startX, startY;
 let layeredCanvas;
 let layeredCtx;
 
+let i=0;
+
 document.addEventListener('DOMContentLoaded', start);
 
 function start()    {
@@ -294,27 +296,56 @@ function clearAll()    {
 
 function floodFill(x, y) {
     if(x>=0 && x<=theCanvas.width && y>=0 && y<=theCanvas.height)   {
-        const pixelData = ctx.getImageData(x, y, 1, 1).data;
-        const red = pixelData[0];
-        const green = pixelData[1];
-        const blue = pixelData[2];
-        const alpha = pixelData[3] / 255;
-        ctx.fillStyle=currentColor;
-        if(red==0 && blue==0 && green==0 && alpha==0)   {
+        if(!isPixelPainted(x, y))   {
+            ctx.fillStyle=currentColor;
             ctx.fillRect(x, y, 1, 1);
-            floodSurrounding(x, y);
+            let theX=x;
+            let theY=y;
+            // while(!isPixelPainted(theX, y) && theX>=0)   {
+            //     theX--;
+            //     ctx.fillRect(theX, y, 1, 1);
+            // }
+            while(!isPixelPainted(theX-1, y) && theX>=0) {
+                theY=y;
+                theX--;
+                while(!isPixelPainted(theX, theY-1) && theY>=0)   {
+                    theY--;
+                    ctx.fillRect(theX, theY, 1, 1);
+                }            }
         }
     }
 }
 
+function isPixelPainted(x, y)   {
+    const pixelData = ctx.getImageData(x, y, 1, 1).data;
+    const red = pixelData[0];
+    const green = pixelData[1];
+    const blue = pixelData[2];
+    const alpha = pixelData[3] / 255;
+    return !(red==0 && blue==0 && green==0 && alpha==0);
+}
+
+function inc() {
+    i++;
+    inc();
+}
+
+try {
+    inc();
+}
+catch(e) {
+    i++;
+    console.log('Maximum stack size is', i, 'in your current browser');
+}  
+
 function floodSurrounding(x, y)    {
     console.log("x="+x+", y="+y);
-    floodFill(x-1, y-1);
+    //floodFill(x-1, y-1);
     floodFill(x, y-1); 
-    floodFill(x+1, y-1); 
+    //floodFill(x+1, y-1); 
     floodFill(x-1, y); 
     floodFill(x+1, y); 
-    floodFill(x-1, y+1); 
+    //floodFill(x-1, y+1); 
     floodFill(x, y+1); 
-    floodFill(x+1, y+1);
+    //floodFill(x+1, y+1);
 }
