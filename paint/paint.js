@@ -50,9 +50,12 @@ let layeredCtx;
 
 let i=0;
 
+let stack;
+
 document.addEventListener('DOMContentLoaded', start);
 
 function start()    {
+    stack=new Stack();
     fillButton=document.getElementById("fill");
     circleButton=document.getElementById("drawCircle");
     layeredCanvas=document.getElementById("layeredCanvas");
@@ -111,7 +114,7 @@ function start()    {
             ctx.moveTo(x, y);
         }
         else if(tool=="filler") {
-            floodFill(x, y);
+            newFloodFill(x, y);
         }
     });
     theCanvas.addEventListener('mousemove', function(e) {
@@ -311,7 +314,8 @@ function floodFill(x, y) {
                 while(!isPixelPainted(theX, theY-1) && theY>=0)   {
                     theY--;
                     ctx.fillRect(theX, theY, 1, 1);
-                }            }
+                }            
+            }
         }
     }
 }
@@ -348,4 +352,68 @@ function floodSurrounding(x, y)    {
     //floodFill(x-1, y+1); 
     floodFill(x, y+1); 
     //floodFill(x+1, y+1);
+}
+
+function newFloodFill(x, y) {
+    stack.push({x: x, y: y, vr: false, vl: false, vt: false, vb: false});
+
+    while (!stack.isEmpty()) {
+        let latestPixel = stack.pop();
+        if (!latestPixel.vr /*|| !latestPixel.vl || !latestPixel.vt || !latestPixel.vb*/) {
+            latestPixel.vr = true;
+            stack.push(latestPixel);
+            if(!isPixelPainted(latestPixel.x+1, latestPixel.y) && latestPixel.x+1<=theCanvas.width) {
+                ctx.fillRect(latestPixel.x+1, latestPixel.y, 1, 1);
+                stack.push({x: latestPixel.x+1, y: latestPixel.y, vr: false, vl: false, vt: false, vb: false});
+            }
+        }
+        stack.print();
+    }
+    console.log("it has finished filling");
+    // if(x>=0 && x<=theCanvas.width && y>=0 && y<=theCanvas.height)   {
+    //     if(!isPixelPainted(x, y))   {
+    //         let theX=x;
+    //         let theY=y;
+    //         while(!isPixelPainted(theX-1, y) && theX>=0) {
+    //             theX--;
+    //         }
+    //         let popped=stack.pop();
+    //     }
+    // }
+}
+
+class Stack {
+    constructor() {
+      this.items = []; 
+    }
+  
+    push(element) {
+      this.items.push(element);
+    }
+  
+    pop() {
+      if (this.isEmpty()) {
+        return "Stack is empty"; 
+      }
+      return this.items.pop();
+    }
+  
+    peek() {
+      if (this.isEmpty()) {
+        return "Stack is empty"; 
+      }
+      return this.items[this.items.length - 1];
+    }
+  
+    isEmpty() {
+      return this.items.length === 0;
+    }
+  
+    size() {
+      return this.items.length;
+    }
+  
+    print() {
+      console.log(JSON.stringify(this.items));
+    }
 }
