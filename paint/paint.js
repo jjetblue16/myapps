@@ -59,7 +59,7 @@ function start()    {
     fillButton=document.getElementById("fill");
     circleButton=document.getElementById("drawCircle");
     layeredCanvas=document.getElementById("layeredCanvas");
-    layeredCtx=layeredCanvas.getContext('2d');
+    layeredCtx=layeredCanvas.getContext('2d', {willReadFrequently: true});
     rectangleButton=document.getElementById("drawRectangle");
     paintbrush=document.getElementById("paintbrush");
     eraser=document.getElementById("eraser");
@@ -329,6 +329,24 @@ function isPixelPainted(x, y)   {
     return !(red==0 && blue==0 && green==0 && alpha==0);
 }
 
+function getCurrentColor(x, y)  {
+    const pixelData = ctx.getImageData(x, y, 1, 1).data;
+    const red = pixelData[0];
+    const green = pixelData[1];
+    const blue = pixelData[2];
+    const alpha = pixelData[3] / 255;
+    return {red, blue, green, alpha};
+}
+
+function isSameColor(x, y, theColor)    {
+    const pixelData = ctx.getImageData(x, y, 1, 1).data;
+    const red = pixelData[0];
+    const green = pixelData[1];
+    const blue = pixelData[2];
+    const alpha = pixelData[3] / 255;
+    return theColor.red==red && theColor.green==green && theColor.blue==blue && theColor.alpha==alpha;
+}
+
 function inc() {
     i++;
     inc();
@@ -342,32 +360,42 @@ catch(e) {
     console.log('Maximum stack size is', i, 'in your current browser');
 }  
 
-function floodSurrounding(x, y)    {
-    console.log("x="+x+", y="+y);
-    //floodFill(x-1, y-1);
-    floodFill(x, y-1); 
-    //floodFill(x+1, y-1); 
-    floodFill(x-1, y); 
-    floodFill(x+1, y); 
-    //floodFill(x-1, y+1); 
-    floodFill(x, y+1); 
-    //floodFill(x+1, y+1);
-}
-
 function newFloodFill(x, y) {
-    stack.push({x: x, y: y, vr: false, vl: false, vt: false, vb: false});
+    let currentPixelColor=getCurrentColor(x, y);
+    stack.push({x: x, y: y, visitedR: false, visitedL: false, visitedT: false, visitedB: false});
 
     while (!stack.isEmpty()) {
+        ctx.fillStyle=currentColor;
         let latestPixel = stack.pop();
-        if (!latestPixel.vr /*|| !latestPixel.vl || !latestPixel.vt || !latestPixel.vb*/) {
-            latestPixel.vr = true;
+        ctx.fillRect(latestPixel.x, latestPixel.y, 1, 1);
+        if (!latestPixel.visitedR) {
+            latestPixel.visitedR = true;
             stack.push(latestPixel);
-            if(!isPixelPainted(latestPixel.x+1, latestPixel.y) && latestPixel.x+1<=theCanvas.width) {
-                ctx.fillRect(latestPixel.x+1, latestPixel.y, 1, 1);
-                stack.push({x: latestPixel.x+1, y: latestPixel.y, vr: false, vl: false, vt: false, vb: false});
+            if(isSameColor(latestPixel.x+1, latestPixel.y, currentPixelColor) && latestPixel.x+1<=theCanvas.width)  {
+                stack.push({x: latestPixel.x+1, y: latestPixel.y, visitedR: false, visitedL: true, visitedT: false, visitedB: false});
             }
         }
-        stack.print();
+        else if(!latestPixel.visitedL)   {
+            latestPixel.visitedL = true;
+            stack.push(latestPixel);
+            if(isSameColor(latestPixel.x-1, latestPixel.y, currentPixelColor) && latestPixel.x-1>=0) {
+                stack.push({x: latestPixel.x-1, y: latestPixel.y, visitedR: true, visitedL: false, visitedT: false, visitedB: false});
+            }
+        }
+        else if(!latestPixel.visitedT)  {
+            latestPixel.visitedT = true;
+            stack.push(latestPixel);
+            if(isSameColor(latestPixel.x, latestPixel.y-1, currentPixelColor) && latestPixel.y-1>=0) {
+                stack.push({x: latestPixel.x, y: latestPixel.y-1, visitedR: false, visitedL: false, visitedT: false, visitedB: true});
+            }
+        }
+        else if(!latestPixel.visitedB)  {
+            latestPixel.visitedB = true;
+            stack.push(latestPixel);
+            if(isSameColor(latestPixel.x, latestPixel.y+1, currentPixelColor) && latestPixel.y+1<=theCanvas.height) {
+                stack.push({x: latestPixel.x, y: latestPixel.y+1, visitedR: false, visitedL: false, visitedT: true, visitedB: false});
+            }
+        }
     }
     console.log("it has finished filling");
     // if(x>=0 && x<=theCanvas.width && y>=0 && y<=theCanvas.height)   {
