@@ -87,7 +87,7 @@ function start()    {
     }
     palette=document.getElementById("palette");
     theCanvas=document.getElementById("myCanvas");
-    ctx=theCanvas.getContext('2d');
+    ctx=theCanvas.getContext('2d', {willReadFrequently: true});
     theCanvas.width=width+"";
     theCanvas.height=height+"";
     window.addEventListener('resize', function() {
@@ -108,7 +108,7 @@ function start()    {
             ctx.strokeStyle="white";
         }
         ctx.lineWidth=sliderValue/7;
-        console.log('d');
+        console.log('mouseDown', e);
         if(tool=="paint" || tool=="erase")  {
             ctx.beginPath();
             ctx.moveTo(x, y);
@@ -362,16 +362,17 @@ catch(e) {
 
 function newFloodFill(x, y) {
     let currentPixelColor=getCurrentColor(x, y);
+    ctx.fillRect(x, y, 1, 1);
     stack.push({x: x, y: y, visitedR: false, visitedL: false, visitedT: false, visitedB: false});
 
     while (!stack.isEmpty()) {
         ctx.fillStyle=currentColor;
         let latestPixel = stack.pop();
-        ctx.fillRect(latestPixel.x, latestPixel.y, 1, 1);
         if (!latestPixel.visitedR) {
             latestPixel.visitedR = true;
             stack.push(latestPixel);
             if(isSameColor(latestPixel.x+1, latestPixel.y, currentPixelColor) && latestPixel.x+1<=theCanvas.width)  {
+                ctx.fillRect(latestPixel.x+1, latestPixel.y, 1, 1);
                 stack.push({x: latestPixel.x+1, y: latestPixel.y, visitedR: false, visitedL: true, visitedT: false, visitedB: false});
             }
         }
@@ -379,6 +380,7 @@ function newFloodFill(x, y) {
             latestPixel.visitedL = true;
             stack.push(latestPixel);
             if(isSameColor(latestPixel.x-1, latestPixel.y, currentPixelColor) && latestPixel.x-1>=0) {
+                ctx.fillRect(latestPixel.x-1, latestPixel.y, 1, 1);
                 stack.push({x: latestPixel.x-1, y: latestPixel.y, visitedR: true, visitedL: false, visitedT: false, visitedB: false});
             }
         }
@@ -386,6 +388,7 @@ function newFloodFill(x, y) {
             latestPixel.visitedT = true;
             stack.push(latestPixel);
             if(isSameColor(latestPixel.x, latestPixel.y-1, currentPixelColor) && latestPixel.y-1>=0) {
+                ctx.fillRect(latestPixel.x, latestPixel.y-1, 1, 1);
                 stack.push({x: latestPixel.x, y: latestPixel.y-1, visitedR: false, visitedL: false, visitedT: false, visitedB: true});
             }
         }
@@ -393,6 +396,7 @@ function newFloodFill(x, y) {
             latestPixel.visitedB = true;
             stack.push(latestPixel);
             if(isSameColor(latestPixel.x, latestPixel.y+1, currentPixelColor) && latestPixel.y+1<=theCanvas.height) {
+                ctx.fillRect(latestPixel.x, latestPixel.y+1, 1, 1);
                 stack.push({x: latestPixel.x, y: latestPixel.y+1, visitedR: false, visitedL: false, visitedT: true, visitedB: false});
             }
         }
