@@ -65,6 +65,8 @@ function start()    {
     eraser=document.getElementById("eraser");
     eraser.style.border="none";
     rectangleButton.style.border="none";
+    fillButton.style.border="none";
+    circleButton.style.border="none";
     paintbrush.style.border="5px black solid";
     background=document.getElementById("background");
     followCircle=document.getElementById("follow");
@@ -90,6 +92,7 @@ function start()    {
     ctx=theCanvas.getContext('2d', {willReadFrequently: true});
     theCanvas.width=width+"";
     theCanvas.height=height+"";
+    clearAll();
     window.addEventListener('resize', function() {
         backgroundInfo=background.getBoundingClientRect();
         width=backgroundInfo.width;
@@ -114,6 +117,7 @@ function start()    {
             ctx.moveTo(x, y);
         }
         else if(tool=="filler") {
+            ctx.fillStyle=currentColor;
             newFloodFill(x, y);
         }
     });
@@ -174,8 +178,9 @@ function start()    {
                         layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
                     }
                 });
-                layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
                 layeredCtx.strokeStyle="black";
+                layeredCtx.strokeRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+                layeredCtx.stroke();
             }
         }
         else if(tool=="drawCircle") {
@@ -187,10 +192,8 @@ function start()    {
         }
     });
     layeredCanvas.addEventListener('mouseup', function(e)    {
+        isMouseDown=false;
         if(tool=="drawRect")    {
-            isMouseDown=false;
-            const x=e.clientX;
-            const y=e.clientY;
             ctx.fillStyle=currentColor;
             ctx.fillRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
         }
@@ -294,39 +297,8 @@ function switchTool(theTool)   {
 }
 
 function clearAll()    {
-    ctx.clearRect(0, 0, theCanvas.width, theCanvas.height);
-}
-
-function floodFill(x, y) {
-    if(x>=0 && x<=theCanvas.width && y>=0 && y<=theCanvas.height)   {
-        if(!isPixelPainted(x, y))   {
-            ctx.fillStyle=currentColor;
-            ctx.fillRect(x, y, 1, 1);
-            let theX=x;
-            let theY=y;
-            // while(!isPixelPainted(theX, y) && theX>=0)   {
-            //     theX--;
-            //     ctx.fillRect(theX, y, 1, 1);
-            // }
-            while(!isPixelPainted(theX-1, y) && theX>=0) {
-                theY=y;
-                theX--;
-                while(!isPixelPainted(theX, theY-1) && theY>=0)   {
-                    theY--;
-                    ctx.fillRect(theX, theY, 1, 1);
-                }            
-            }
-        }
-    }
-}
-
-function isPixelPainted(x, y)   {
-    const pixelData = ctx.getImageData(x, y, 1, 1).data;
-    const red = pixelData[0];
-    const green = pixelData[1];
-    const blue = pixelData[2];
-    const alpha = pixelData[3] / 255;
-    return !(red==0 && blue==0 && green==0 && alpha==0);
+    ctx.fillStyle="white";
+    ctx.fillRect(0, 0, theCanvas.width, theCanvas.height);
 }
 
 function getCurrentColor(x, y)  {
@@ -347,6 +319,7 @@ function isSameColor(x, y, theColor)    {
     return theColor.red==red && theColor.green==green && theColor.blue==blue && theColor.alpha==alpha;
 }
 
+/* find stack size
 function inc() {
     i++;
     inc();
@@ -359,6 +332,7 @@ catch(e) {
     i++;
     console.log('Maximum stack size is', i, 'in your current browser');
 }  
+*/
 
 function newFloodFill(x, y) {
     let currentPixelColor=getCurrentColor(x, y);
@@ -402,16 +376,6 @@ function newFloodFill(x, y) {
         }
     }
     console.log("it has finished filling");
-    // if(x>=0 && x<=theCanvas.width && y>=0 && y<=theCanvas.height)   {
-    //     if(!isPixelPainted(x, y))   {
-    //         let theX=x;
-    //         let theY=y;
-    //         while(!isPixelPainted(theX-1, y) && theX>=0) {
-    //             theX--;
-    //         }
-    //         let popped=stack.pop();
-    //     }
-    // }
 }
 
 class Stack {
@@ -448,4 +412,12 @@ class Stack {
     print() {
       console.log(JSON.stringify(this.items));
     }
+}
+
+function saveAsPng()    {
+    const imageDataURL = theCanvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = imageDataURL;
+    link.download = 'canvas-image.png';
+    link.click();
 }
