@@ -52,10 +52,13 @@ let i=0;
 
 let stack;
 
+let fileInput;
+
 document.addEventListener('DOMContentLoaded', start);
 
 function start()    {
     stack=new Stack();
+    fileInput = document.getElementById('fileInput');
     fillButton=document.getElementById("fill");
     circleButton=document.getElementById("drawCircle");
     layeredCanvas=document.getElementById("layeredCanvas");
@@ -420,4 +423,28 @@ function saveAsPng()    {
     link.href = imageDataURL;
     link.download = 'canvas-image.png';
     link.click();
+}
+
+function getFileInput() {
+    fileInput.click();
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(file) {
+            console.log(`Selected file: ${file.name}`);
+            if(file.type==='image/png') {
+                const img = new Image();
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                };
+                img.onload = () => {
+                    img.width="100%";
+                    img.height="100%";
+                    ctx.drawImage(img, 0, 0);
+                };
+                reader.readAsDataURL(file);
+            }
+            else alert('Please upload a valid PNG file.');
+        }
+    });
 }
