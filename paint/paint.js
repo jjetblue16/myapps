@@ -78,10 +78,10 @@ function start()    {
     let backgroundInfo=background.getBoundingClientRect();
     width=backgroundInfo.width;
     height=backgroundInfo.height;
-    layeredCanvas.width=width+"";
+    layeredCanvas.width=width*0.8+"";
     layeredCanvas.height=height+"";
     layeredCanvas.style.top="0";
-    layeredCanvas.style.left="0";
+    layeredCanvas.style.right="0";
     slidecontainer=document.getElementById("slidecontainer");
     paletteOpen=document.getElementById("openPalette");
     tools=document.getElementById("tools");
@@ -93,7 +93,7 @@ function start()    {
     palette=document.getElementById("palette");
     theCanvas=document.getElementById("myCanvas");
     ctx=theCanvas.getContext('2d', {willReadFrequently: true});
-    theCanvas.width=width+"";
+    theCanvas.width=width*0.8+"";
     theCanvas.height=height+"";
     clearAll();
     window.addEventListener('resize', function() {
@@ -107,8 +107,8 @@ function start()    {
     });
     theCanvas.addEventListener('mousedown', function(e) {
         isMouseDown=true;
-        const x=e.clientX;
-        const y=e.clientY;
+        const x=e.offsetX;
+        const y=e.offsetY;
         ctx.strokeStyle=currentColor;
         if(tool=="erase")  {
             ctx.strokeStyle="white";
@@ -126,8 +126,8 @@ function start()    {
     });
     theCanvas.addEventListener('mousemove', function(e) {
         if(isMouseDown) {
-            const x=e.clientX;
-            const y=e.clientY;
+            const x=e.offsetX;
+            const y=e.offsetY;
             if(tool=="paint" || tool=="erase")  {
                 ctx.lineTo(x, y);
                 ctx.stroke();
@@ -138,22 +138,25 @@ function start()    {
     theCanvas.addEventListener('mouseup', function(e)   {
         console.log('u');
         isMouseDown=false;
-        const x=e.clientX;
-        const y=e.clientY;
+        const x=e.offsetX;
+        const y=e.offsetY;
         if(tool=="paint" || tool=="erase")  {
             ctx.lineTo(x, y);
             ctx.stroke();
         }
     });
     layeredCanvas.addEventListener('mousedown', function(e)    {
+        layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
         isMouseDown=true;
-        const x=e.clientX;
-        const y=e.clientY;
+        let x=e.offsetX;
+        let y=e.offsetY;
         if(tool=="drawRect") {
             rectangleTopLeftX=x;
             rectangleTopLeftY=y;
         }
         else if(tool=="drawCircle") {
+            x=e.clientX;
+            y=e.clientY;
             isDrawing = true;
             startX=x-theCanvas.getBoundingClientRect().left;
             startY=y-theCanvas.getBoundingClientRect().top;
@@ -161,8 +164,9 @@ function start()    {
     });
     layeredCanvas.addEventListener('mousemove', function(e)    {
         layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
-        const x=e.clientX;
-        const y=e.clientY;
+        const x=e.offsetX;
+        const y=e.offsetY;
+        layeredCtx.beginPath();
         if(tool=="drawRect") {
             rectWidth=x-rectangleTopLeftX;
             rectHeight=y-rectangleTopLeftY;
@@ -207,6 +211,7 @@ function start()    {
             const currentY=e.clientY-theCanvas.getBoundingClientRect().top;
             drawEllipse(startX, startY, currentX, currentY, false);
         }
+        layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
     });
     slider.addEventListener('input', function() {
         sliderValue=slider.value;
@@ -225,7 +230,6 @@ function start()    {
     document.documentElement.addEventListener('mouseenter', () => {
         followCircle.style.display="block";
     });
-
     document.documentElement.addEventListener('mouseleave', () => {
         followCircle.style.display="none";
     });

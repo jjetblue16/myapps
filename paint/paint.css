@@ -144,7 +144,5 @@ button  {
     display: none;
     z-index: 2;
     background-color: transparent;
-    top: 100px;
-    left: 100px;
     position:  absolute;
 }
