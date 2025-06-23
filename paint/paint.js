@@ -203,8 +203,27 @@ function start()    {
         if(tool=="drawRect")    {
             ctx.fillStyle=currentColor;
             ctx.fillRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+            rectangleTopLeftX=null;
+            rectangleTopLeftY=null;
+            rectWidth=null;
+            rectHeight=null;
         }
         else if(tool=="drawCircle") {
+            isDrawing=false;
+            layeredCtx.clearRect(0, 0, theCanvas.width, theCanvas.height);
+            const currentX=e.clientX-theCanvas.getBoundingClientRect().left;
+            const currentY=e.clientY-theCanvas.getBoundingClientRect().top;
+            drawEllipse(startX, startY, currentX, currentY, false);
+        }
+        layeredCtx.clearRect(0, 0, layeredCanvas.width, layeredCanvas.height);
+    });
+    layeredCanvas.addEventListener('mouseleave', function(e)    {
+        if(tool=="drawRect" && isMouseDown)    {
+            isMouseDown=false;
+            ctx.fillStyle=currentColor;
+            ctx.fillRect(rectangleTopLeftX, rectangleTopLeftY, rectWidth, rectHeight);
+        }
+        else if(tool=="drawCircle" && isDrawing) {
             isDrawing=false;
             layeredCtx.clearRect(0, 0, theCanvas.width, theCanvas.height);
             const currentX=e.clientX-theCanvas.getBoundingClientRect().left;
