@@ -454,7 +454,7 @@ function getFileInput() {
         const file = e.target.files[0];
         if(file) {
             console.log(`Selected file: ${file.name}`);
-            if(file.type==='image/png') {
+            if(file.type==='image/png' || file.type==="image/jpeg") {
                 const img = new Image();
                 const reader = new FileReader();
                 reader.onload = (e) => {
