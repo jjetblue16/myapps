@@ -366,8 +366,7 @@ function isMobileUserAgent() {
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent))  {
         let startX, startY;
         const minSwipeDistance = window.innerWidth * 0.062;
-;
-
+        
         document.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
