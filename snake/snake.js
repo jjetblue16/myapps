@@ -41,11 +41,6 @@ let isBoxFill=false;
 
 let snakeIncrementSize=2;
 
-let leftBox;
-let rightBox;
-let upBox;
-let downBox;
-
 document.addEventListener('DOMContentLoaded', start);
 document.addEventListener('keydown', (e)=>{
     if(lockDirection==false)    {
@@ -92,10 +87,6 @@ document.addEventListener('keydown', (e)=>{
 
 function start()    {
     playBox=document.getElementById("playBox");
-    leftBox=document.getElementById("leftBox");
-    rightBox=document.getElementById("rightBox");
-    upBox=document.getElementById("upBox");
-    downBox=document.getElementById("downBox");
     background=document.getElementById("background");
     let size=background.getBoundingClientRect();
     width=size.width;
@@ -113,91 +104,7 @@ function start()    {
     drawGrid();
     fillBox(currentRow, currentColumn);
     makeApple();
-    
-    upBox.addEventListener('mousedown', function () {
-        nextDirection=nextDirection!="down" ? "up" : nextDirection;
-        lockDirection=true;
-        if(firstMove) {
-            currentDirection=nextDirection;
-            interval=setInterval(move, movingInterval);
-            firstMove=false;
-            upBox.style.width="100%";
-            upBox.style.height-"50%";
-            downBox.style.width="100%";
-            downBox.style.height="50%";
-            rightBox.style.width="50%";
-            rightBox.style.height="100%";
-            leftBox.style.width="50%";
-            leftBox.style.height="100%";
-        }
-        upBox.style.display="none";
-        downBox.style.display="none";
-        rightBox.style.display="block";
-        leftBox.style.display="block";
-    });
-    downBox.addEventListener('mousedown', function () {
-        nextDirection=nextDirection!="up" ? "down" : nextDirection;
-        lockDirection=true;
-        if(firstMove) {
-            currentDirection=nextDirection;
-            interval=setInterval(move, movingInterval);
-            firstMove=false;
-            upBox.style.width="100%";
-            upBox.style.height-"50%";
-            downBox.style.width="100%";
-            downBox.style.height="50%";
-            rightBox.style.width="50%";
-            rightBox.style.height="100%";
-            leftBox.style.width="50%";
-            leftBox.style.height="100%";
-        }
-        upBox.style.display="none";
-        downBox.style.display="none";
-        rightBox.style.display="block";
-        leftBox.style.display="block";
-    });
-    leftBox.addEventListener('mousedown', function () {
-        nextDirection=nextDirection!="right" ? "left" : nextDirection;
-        lockDirection=true;
-        if(firstMove) {
-            currentDirection=nextDirection;
-            interval=setInterval(move, movingInterval);
-            firstMove=false;
-            upBox.style.width="100%";
-            upBox.style.height-"50%";
-            downBox.style.width="100%";
-            downBox.style.height="50%";
-            rightBox.style.width="50%";
-            rightBox.style.height="100%";
-            leftBox.style.width="50%";
-            leftBox.style.height="100%";
-        }
-        upBox.style.display="block";
-        downBox.style.display="block";
-        rightBox.style.display="none";
-        leftBox.style.display="none";
-    });
-    rightBox.addEventListener('mousedown', function () {
-        nextDirection=nextDirection!="left" ? "right" : nextDirection;
-        lockDirection=true;
-        if(firstMove) {
-            currentDirection=nextDirection;
-            interval=setInterval(move, movingInterval);
-            firstMove=false;
-            upBox.style.width="100%";
-            upBox.style.height-"50%";
-            downBox.style.width="100%";
-            downBox.style.height="50%";
-            rightBox.style.width="50%";
-            rightBox.style.height="100%";
-            leftBox.style.width="50%";
-            leftBox.style.height="100%";
-        }
-        upBox.style.display="block";
-        downBox.style.display="block";
-        rightBox.style.display="none";
-        leftBox.style.display="none";
-    });
+    isMobileUserAgent();
 }
 
 function drawGrid() {
@@ -401,10 +308,6 @@ function gameOver() {
     clearInterval(interval);
     let lose=document.getElementById("loseScreen");
     lose.style.display="block";
-    upBox.style.display="none";
-    downBox.style.display="none";
-    rightBox.style.display="none";
-    leftBox.style.display="none";
 }
 
 function restart()  {
@@ -415,11 +318,6 @@ function restart()  {
         clearBox(toClear.theRow, toClear.theCol);
     }
     lockDirection=false;
-    upBox.style.display="block";
-    downBox.style.display="block";
-    rightBox.style.display="block";
-    leftBox.style.display="block";
-
     firstMove=true;
     movingInterval=30;
     isBoxFill=false;
@@ -460,6 +358,74 @@ function eat(row, col)  {
             movingInterval=movingInterval-2;
             interval=setInterval(move, movingInterval);
         }
+    }
+}
+
+function isMobileUserAgent() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent))  {
+        let startX, startY;
+        const minSwipeDistance = 50;
+
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            if(Math.abs(deltaX) > minSwipeDistance || Math.abs(deltaY) > minSwipeDistance) {
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > 0) {
+                        console.log('Swipe Right');
+                        nextDirection=nextDirection!="left" ? "right" : nextDirection;
+                        lockDirection=true;
+                        if(firstMove) {
+                            currentDirection=nextDirection;
+                            interval=setInterval(move, movingInterval);
+                            firstMove=false;
+                        }
+                    } 
+                    else {
+                        console.log('Swipe Left');
+                        nextDirection=nextDirection!="right" ? "left" : nextDirection;
+                        lockDirection=true;
+                        if(firstMove) {
+                            currentDirection=nextDirection;
+                            interval=setInterval(move, movingInterval);
+                            firstMove=false;
+                        }
+                    }
+                } 
+                else {
+                    if (deltaY > 0) {
+                        console.log('Swipe Down');
+                        nextDirection=nextDirection!="up" ? "down" : nextDirection;
+                        lockDirection=true;
+                        if(firstMove) {
+                            currentDirection=nextDirection;
+                            interval=setInterval(move, movingInterval);
+                            firstMove=false;
+                        }
+                    } 
+                    else {
+                        console.log('Swipe Up');
+                        nextDirection=nextDirection!="down" ? "up" : nextDirection;
+                        lockDirection=true;
+                        if(firstMove) {
+                            currentDirection=nextDirection;
+                            interval=setInterval(move, movingInterval);
+                            firstMove=false;
+                        }
+                    }
+                }
+            }
+        });
     }
 }
 
