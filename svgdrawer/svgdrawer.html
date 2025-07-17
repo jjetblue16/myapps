@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SVG to G-code with Canvas</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      display: flex;
+      gap: 2em;
+    }
+    .column {
+      display: flex;
+      flex-direction: column;
+    }
+    #canvasContainer {
+      width: 400px;
+      height: 400px;
+      border: 1px solid #ccc;
+    }
+    canvas {
+      background: #f9f9f9;
+    }
+    textarea {
+      width: 400px;
+      height: 300px;
+      margin-top: 1em;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+<div class="column">
+  <h2>Upload SVG</h2>
+  <input type="file" id="fileInput" accept=".svg" />
+  <button onclick="downloadGcode()">Download G-code</button>
+</div>
+
+<div class="column">
+  <h2>Canvas Toolpath Preview</h2>
+  <div id="canvasContainer">
+    <canvas id="canvasPreview" width="1000" height="1000"></canvas>
+  </div>
+</div>
+
+<div class="column">
+  <h2>G-code Output</h2>
+  <textarea id="gcodeOutput" placeholder="G-code will appear here..."></textarea>
+</div>
+
+<script>
+let fullGcode = '';
+
+document.getElementById('fileInput').addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function (event) {
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(event.target.result, "image/svg+xml");
+    const paths = svgDoc.querySelectorAll("path");
+
+    const canvas = document.getElementById('canvasPreview');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let gcode = `; Generated from SVG\nG21 ; mm units\nG90 ; Absolute positioning\nG0 Z5 ; Pen up\n`;
+
+    paths.forEach((pathEl, i) => {
+      const length = pathEl.getTotalLength();
+      const segments = 500;
+      const step = length / segments;
+
+      gcode += `\n; Path ${i + 1}\n`;
+      let prev = null;
+
+      for (let j = 0; j <= segments; j++) {
+        const pt = pathEl.getPointAtLength(j * step);
+        const x = pt.x.toFixed(2);
+        const y = pt.y.toFixed(2);
+
+        if (j === 0) {
+          gcode += `G0 Z5\nG0 X${x} Y${y}\nG1 Z-1\n`;
+
+          // Start marker on canvas
+          ctx.fillStyle = 'red';
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          gcode += `G1 X${x} Y${y} F1000\n`;
+        }
+
+        if (prev) {
+          const dx = pt.x - prev.x;
+          const dy = pt.y - prev.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          ctx.strokeStyle = dist > 100 ? 'green' : 'blue';
+          ctx.beginPath();
+          ctx.moveTo(prev.x, prev.y);
+          ctx.lineTo(pt.x, pt.y);
+          ctx.stroke();
+        }
+
+        prev = pt;
+      }
+
+      gcode += `G0 Z5\n`;
+    });
+
+    fullGcode = gcode;
+    document.getElementById('gcodeOutput').value = gcode;
+  };
+
+  reader.readAsText(file);
+});
+
+function downloadGcode() {
+  const blob = new Blob([fullGcode], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "output.gcode";
+  a.click();
+}
+</script>
+
+</body>
+</html>
