@@ -16,9 +16,9 @@ let gameMode = 'menu';
 
 let player1Score = 0;
 let player2Score = 0;
-const WINNING_SCORE = 11;
+const WINNING_SCORE = 7;
 
-let currentFixedSpeedX = 2.8;
+let currentFixedSpeedX = 3;
 const paddleSpeed = 3.5;
 const aiSpeed = 2;
 const SPEED_INCREASE_FACTOR = 1.07;
