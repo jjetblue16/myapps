@@ -1,0 +1,109 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#background {
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    display: block;
+    top: 0;
+    left: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.paddle {
+    background-color: white;
+    height: 16%;
+    width: 8px;
+    position: absolute;
+}
+
+#ball   {
+    background-color: white;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+}
+
+#score1, #score2, #score-dash {
+    position: absolute;
+    font-family: 'Impact', sans-serif;
+    font-size: 40px;
+    color: white;
+    top: 20px;
+    z-index: 10;
+}
+
+#score-dash {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#score1 {
+    left: 45%;
+    transform: translateX(-100%);
+    letter-spacing: 5px;
+}
+
+#score2 {
+    right: 45%;
+    transform: translateX(100%);
+    letter-spacing: 5px;
+}
+
+#winner-message {
+    position: absolute;
+    font-family: 'Impact', sans-serif;
+    font-size: 50px;
+    color: white;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100px;
+    z-index: 20;
+}
+
+#title {
+    position: absolute;
+    font-family: 'Impact', sans-serif;
+    font-size: 80px;
+    color: white;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10%;
+    z-index: 30;
+    white-space: nowrap;
+}
+
+
+#vsSelect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-family: 'Impact', sans-serif;
+    font-size: 24px;
+    z-index: 30;
+}
+
+#vsSelect button {
+    display: block;
+    width: auto;
+    height: auto;
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    font-family: 'Impact', sans-serif;
+}
