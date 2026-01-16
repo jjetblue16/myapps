@@ -48,7 +48,7 @@ function start() {
     titleElement = document.getElementById("title");
    
     ball.style.position = 'absolute';
-    ball.style.height = "4%";
+    ball.style.height = "3%";
     const ballHeightPixels = ball.offsetHeight;
     ball.style.width = ballHeightPixels + 'px';
 
