@@ -18,9 +18,9 @@ let player1Score = 0;
 let player2Score = 0;
 const WINNING_SCORE = 7;
 
-let currentFixedSpeedX = 3.5;
+let currentFixedSpeedX = 3.6;
 const paddleSpeed = 3.5;
-const aiSpeed = 2.5;
+const aiSpeed = 2.35;
 const SPEED_INCREASE_FACTOR = 1.06;
 
 let ballSpeedX;
@@ -187,6 +187,15 @@ function moveBall() {
     ball.style.left = (ball.offsetLeft + ballSpeedX) + 'px';
     ball.style.top = (ball.offsetTop + ballSpeedY) + 'px';
 }
+function getTop(el) {
+    // prefer inline style (float) then computed then offsetTop
+    const s = el.style.top;
+    if (s) return parseFloat(s);
+    return parseFloat(getComputedStyle(el).top) || el.offsetTop;
+}
+function setTop(el, value) {
+    el.style.top = value + 'px';
+}
 
 function movePaddles() {
     const backgroundHeight = background.offsetHeight;
@@ -194,13 +203,15 @@ function movePaddles() {
     const minTop = 0;
     const maxTop = backgroundHeight - paddleHeight;
 
+    let currentTop = getTop(paddle1);
+
     if (keys.KeyW) {
-        let newTop = paddle1.offsetTop - paddleSpeed;
-        paddle1.style.top = Math.max(newTop,       minTop) + 'px';
+        let newTop = currentTop - paddleSpeed;
+        setTop(paddle1, Math.max(newTop, minTop));
     }
     if (keys.KeyS) {
-        let newTop = paddle1.offsetTop + paddleSpeed;
-        paddle1.style.top = Math.min(newTop,       maxTop) + 'px';
+        let newTop = currentTop + paddleSpeed;
+        setTop(paddle1, Math.min(newTop, maxTop));
     }
 }
 
@@ -210,13 +221,15 @@ function movePlayer2Human() {
     const minTop = 0;
     const maxTop = backgroundHeight - paddleHeight;
 
+    let currentTop = getTop(paddle2);
+
     if (keys.ArrowUp) {
-        let newTop = paddle2.offsetTop - paddleSpeed;
-        paddle2.style.top = Math.max(newTop,       minTop) + 'px';
+        let newTop = currentTop - paddleSpeed;
+        setTop(paddle2, Math.max(newTop, minTop));
     }
     if (keys.ArrowDown) {
-        let newTop = paddle2.offsetTop + paddleSpeed;
-        paddle2.style.top = Math.min(newTop,       maxTop) + 'px';
+        let newTop = currentTop + paddleSpeed;
+        setTop(paddle2, Math.min(newTop, maxTop));
     }
 }
 
@@ -353,6 +366,6 @@ function calculateNewAngle(paddle) {
     const ballCenterY = ball.offsetTop + ball.offsetHeight / 2;
     const relativeIntersection = ballCenterY - paddleCenterY;
     const normalizedIntersection = relativeIntersection / (paddle.offsetHeight / 2);
-    const BOUNCE_ANGLE_MULTIPLIER = 3.5;
+    const BOUNCE_ANGLE_MULTIPLIER = 3.6;
     ballSpeedY = normalizedIntersection * BOUNCE_ANGLE_MULTIPLIER;
 }
