@@ -8,11 +8,15 @@ let winnerMessageElement;
 let vsSelectElement;
 let titleElement;
 
+let hitSound;
+let scoreSound;
+
 let gameStarted = false;
 let gameLoopId;
 let isScoring = false;
 let gameOver = false;
 let gameMode = 'menu';
+
 
 let player1Score = 0;
 let player2Score = 0;
@@ -46,6 +50,12 @@ function start() {
     winnerMessageElement = document.getElementById("winner-message");
     vsSelectElement = document.getElementById("vsSelect");
     titleElement = document.getElementById("title");
+
+    hitSound = new Audio('hit.mp4');
+    hitSound.volume = 0.7
+    hitSound.load();
+    scoreSound = new Audio('victory.mp3');
+    scoreSound.load();
    
     ball.style.position = 'absolute';
     ball.style.height = "3%";
@@ -275,6 +285,7 @@ function checkGoal() {
 
     if (ballLeft < 0 || ballRight > backgroundWidth) {
         handleScore();
+        scoreSound.play();
     }
 }
 
@@ -338,11 +349,13 @@ function checkPaddleCollision() {
         calculateNewAngle(paddle1);
         increaseSpeed();
         ballSpeedX = currentFixedSpeedX;
+        hitSound.play();
     }
     if (isColliding(ball,       paddle2) && ballSpeedX > 0) {
         calculateNewAngle(paddle2);
         increaseSpeed();
         ballSpeedX = -currentFixedSpeedX;
+        hitSound.play();
     }
 }
 
