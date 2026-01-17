@@ -52,7 +52,7 @@ function start() {
     titleElement = document.getElementById("title");
 
     hitSound = new Audio('hit.mp4');
-    hitSound.volume = 0.7
+    hitSound.volume = 0.7;
     hitSound.load();
     scoreSound = new Audio('victory.mp3');
     scoreSound.load();
