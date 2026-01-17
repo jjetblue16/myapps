@@ -18,10 +18,10 @@ let player1Score = 0;
 let player2Score = 0;
 const WINNING_SCORE = 7;
 
-let currentFixedSpeedX = 3.6;
+let currentFixedSpeedX = 7;
 const paddleSpeed = 3.5;
 const aiSpeed = 2.35;
-const SPEED_INCREASE_FACTOR = 1.06;
+const SPEED_INCREASE_FACTOR = 1.08;
 
 let ballSpeedX;
 let ballSpeedY;
